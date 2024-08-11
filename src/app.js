@@ -8,6 +8,6 @@ app.use(express.json());
 app.use(express.urlencoded({extende:true}));
 
 const server=app.listen(PORT,()=>{
-    console.log(`Server en puerto ${PORT}`);
+    console.log(`Listening on port ${PORT}`);
     
 });
