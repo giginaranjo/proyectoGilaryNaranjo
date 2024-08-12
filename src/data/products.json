@@ -193,16 +193,5 @@
           "thumbnail": [
                "images/laptop_ideapad_3.jpg"
           ]
-     },
-     {
-          "id": 16,
-          "title": "jeje",
-          "description": "xdxdxd",
-          "code": "crisis",
-          "price": 3,
-          "status": true,
-          "stock": 1000000,
-          "category": "auxilio",
-          "thumbnail": []
      }
 ]
