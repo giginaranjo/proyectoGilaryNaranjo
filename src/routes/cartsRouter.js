@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     let newCart = req.body
 
-    if (newCart.products.length === 0 || !Array.isArray(newCart.products)) {
+    if (newCart.product.length === 0 || !Array.isArray(newCart.product)) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: 'Check and re-enter the required fields' })
     } 
