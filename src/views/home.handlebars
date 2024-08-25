@@ -1,3 +1,24 @@
-<h2>Products</h2>
+{{!-- Vista de productos --}}
+
+<h2>Product list</h2>
 <br>
-<a href="/realTimeProducts">realtimeproducts</a>
+<a href="/realTimeProducts">Real time products</a>
+<br>
+
+<ul>
+    {{#each products}}
+    <li id="{{this.id}}">
+
+        <h3>{{this.title}}</h3>
+        <strong>Product information:</strong>
+        <p>Description: {{this.description}}</p>
+        <p>Code: {{this.code}}</p>
+        <h4>Price: ${{this.price}}</h4>
+        <p>Status: {{this.status}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>Category: {{this.category}}</p>
+        <p>Thumbnail: {{this.thumbnail}}</p>
+
+    </li>
+    {{/each}}
+</ul>
