@@ -1,15 +1,9 @@
 
-# Primera pre-entrega
-
-
-
-
+# Segunda pre-entrega
 
 ## Authors
 
 - Naranjo, Gilary [@giginaranjo](https://github.com/giginaranjo)
-
-
 
 ## Description
 
@@ -23,10 +17,13 @@ Crear producto
 Crear carrito
 {"product":[{"id":"", "quantity":}]}
 
+Actualización: 
 
+Se integraron vistas y sockets al servidor actual.
 
 
 ## Dependencies
 
-- Express
-
+- express
+- express-handlebars
+- socket.io
