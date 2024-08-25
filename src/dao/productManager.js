@@ -6,6 +6,8 @@ const dbProducts = path.resolve("./src/data/products.json");
 
 export default class ProductsManager {
 
+    // Obtener productos
+
     static async getProducts() {
         if (fs.existsSync(dbProducts)) {
             let products = JSON.parse(await fs.promises.readFile(dbProducts, { encoding: "utf-8" }))
@@ -14,6 +16,8 @@ export default class ProductsManager {
             return []
         }
     }
+
+    // Añadir productos
 
     static async addProduct(newProduct) {
         let products = await this.getProducts()
@@ -43,6 +47,8 @@ export default class ProductsManager {
         return addedProduct
     }
 
+    // Modificar productos
+
     static async modifyProduct(id, modification = {}) {
         let products = await this.getProducts()
         let indexProduct = products.findIndex(p => p.id == id)
@@ -61,6 +67,8 @@ export default class ProductsManager {
         return products[indexProduct]
     }
 
+    // Eliminar productos
+
     static async deleteProduct(id) {
         let products = await this.getProducts()
         let productsAfter = products.filter(p => p.id != id)
@@ -75,5 +83,3 @@ export default class ProductsManager {
 
     }
 }
-
-

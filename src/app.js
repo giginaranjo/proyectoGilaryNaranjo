@@ -1,5 +1,6 @@
 import path from "path";
 import express from "express";
+import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 
 import productsRouter from "./routes/productsRouter.js";
@@ -22,6 +23,8 @@ app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
 app.use("/", viewsRouter)
 
-app.listen(PORT, () => {
+const server = app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
+
+const io = new Server(server)

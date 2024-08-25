@@ -6,6 +6,8 @@ const dbCarts = path.resolve("./src/data/carts.json");
 
 export default class CartsManager {
 
+    // Obtener carrito
+
     static async getCarts() {
         if (fs.existsSync(dbCarts)) {
             let carts = JSON.parse(await fs.promises.readFile(dbCarts, { encoding: "utf-8" }))
@@ -14,6 +16,8 @@ export default class CartsManager {
             return []
         }
     }
+
+    // Crear carrito
 
     static async createCart(newCart) {
 
@@ -31,6 +35,8 @@ export default class CartsManager {
         await fs.promises.writeFile(dbCarts, JSON.stringify(carts, null, 5))
         return cartCreated
     }
+
+    // Añadir productos a carrito
 
     static async addProduct(idCard, idProduct) {
         let carts = await this.getCarts()
@@ -61,5 +67,4 @@ export default class CartsManager {
         await fs.promises.writeFile(dbCarts, JSON.stringify(carts, null, 5))
         return cart
     } 
-
 }
