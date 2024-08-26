@@ -1,197 +1,197 @@
 [
      {
-         "id": 1,
-         "title": "Smartphone X Pro",
-         "description": "A next-generation smartphone with an AMOLED display and a 108 MP camera.",
-         "code": "SPXPRO123",
-         "price": 899.99,
-         "status": true,
-         "stock": 25,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_x_pro.jpg"
-         ]
+          "id": 1,
+          "title": "Smartphone X Pro",
+          "description": "A next-generation smartphone with an AMOLED display and a 108 MP camera.",
+          "code": "SPXPRO123",
+          "price": 899.99,
+          "status": true,
+          "stock": 25,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_x_pro.jpg"
+          ]
      },
      {
-         "id": 2,
-         "title": "Smartphone Y Lite",
-         "description": "An affordable phone with good battery life and decent performance.",
-         "code": "SPYLITE456",
-         "price": 299.99,
-         "status": true,
-         "stock": 50,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_y_lite.jpg"
-         ]
+          "id": 2,
+          "title": "Smartphone Y Lite",
+          "description": "An affordable phone with good battery life and decent performance.",
+          "code": "SPYLITE456",
+          "price": 299.99,
+          "status": true,
+          "stock": 50,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_y_lite.jpg"
+          ]
      },
      {
-         "id": 3,
-         "title": "Laptop ZenBook 14",
-         "description": "A lightweight and powerful laptop with an Intel i7 processor and 16 GB of RAM.",
-         "code": "LZB14INT7",
-         "price": 1199.99,
-         "status": true,
-         "stock": 15,
-         "category": "Computers",
-         "thumbnail": [
-             "images/laptop_zenbook_14.jpg"
-         ]
+          "id": 3,
+          "title": "Laptop ZenBook 14",
+          "description": "A lightweight and powerful laptop with an Intel i7 processor and 16 GB of RAM.",
+          "code": "LZB14INT7",
+          "price": 1199.99,
+          "status": true,
+          "stock": 15,
+          "category": "Computers",
+          "thumbnail": [
+               "images/laptop_zenbook_14.jpg"
+          ]
      },
      {
-         "id": 4,
-         "title": "Laptop Flex 5",
-         "description": "A 2-in-1 convertible laptop with a touchscreen and AMD Ryzen 5 processor.",
-         "code": "LFLX5AMD",
-         "price": 849.99,
-         "status": true,
-         "stock": 20,
-         "category": "Computers",
-         "thumbnail": [
-             "images/laptop_flex_5.jpg"
-         ]
+          "id": 4,
+          "title": "Laptop Flex 5",
+          "description": "A 2-in-1 convertible laptop with a touchscreen and AMD Ryzen 5 processor.",
+          "code": "LFLX5AMD",
+          "price": 849.99,
+          "status": true,
+          "stock": 20,
+          "category": "Computers",
+          "thumbnail": [
+               "images/laptop_flex_5.jpg"
+          ]
      },
      {
-         "id": 5,
-         "title": "Smartphone Z Max",
-         "description": "A high-end phone with 5G and a 6.8-inch display.",
-         "code": "SPZMAX789",
-         "price": 999.99,
-         "status": true,
-         "stock": 10,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_z_max.jpg"
-         ]
+          "id": 5,
+          "title": "Smartphone Z Max",
+          "description": "A high-end phone with 5G and a 6.8-inch display.",
+          "code": "SPZMAX789",
+          "price": 999.99,
+          "status": true,
+          "stock": 10,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_z_max.jpg"
+          ]
      },
      {
-         "id": 6,
-         "title": "Smartphone A Mini",
-         "description": "Compact and efficient, ideal for those looking for portability.",
-         "code": "SPAMINI321",
-         "price": 199.99,
-         "status": true,
-         "stock": 30,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_a_mini.jpg"
-         ]
+          "id": 6,
+          "title": "Smartphone A Mini",
+          "description": "Compact and efficient, ideal for those looking for portability.",
+          "code": "SPAMINI321",
+          "price": 199.99,
+          "status": true,
+          "stock": 30,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_a_mini.jpg"
+          ]
      },
      {
-         "id": 7,
-         "title": "Laptop Predator Helios",
-         "description": "A gaming laptop with NVIDIA RTX 3080 GPU and a 17-inch display.",
-         "code": "LPREDHELIOS",
-         "price": 2199.99,
-         "status": true,
-         "stock": 8,
-         "category": "Computers",
-         "thumbnail": [
-             "images/laptop_predator_helios.jpg"
-         ]
+          "id": 7,
+          "title": "Laptop Predator Helios",
+          "description": "A gaming laptop with NVIDIA RTX 3080 GPU and a 17-inch display.",
+          "code": "LPREDHELIOS",
+          "price": 2199.99,
+          "status": true,
+          "stock": 8,
+          "category": "Computers",
+          "thumbnail": [
+               "images/laptop_predator_helios.jpg"
+          ]
      },
      {
-         "id": 8,
-         "title": "Laptop Aspire 5",
-         "description": "A versatile laptop with an Intel i5 processor and Full HD display.",
-         "code": "LASP5INT",
-         "price": 699.99,
-         "status": true,
-         "stock": 22,
-         "category": "Computers",
-         "thumbnail": [
-             "images/laptop_aspire_5.jpg"
-         ]
+          "id": 8,
+          "title": "Laptop Aspire 5",
+          "description": "A versatile laptop with an Intel i5 processor and Full HD display.",
+          "code": "LASP5INT",
+          "price": 699.99,
+          "status": true,
+          "stock": 22,
+          "category": "Computers",
+          "thumbnail": [
+               "images/laptop_aspire_5.jpg"
+          ]
      },
      {
-         "id": 9,
-         "title": "Smartphone B Ultra",
-         "description": "A phone with a 108 MP camera and a 6.9-inch display.",
-         "code": "SPBULTRA654",
-         "price": 1299.99,
-         "status": true,
-         "stock": 12,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_b_ultra.jpg"
-         ]
+          "id": 9,
+          "title": "Smartphone B Ultra",
+          "description": "A phone with a 108 MP camera and a 6.9-inch display.",
+          "code": "SPBULTRA654",
+          "price": 1299.99,
+          "status": true,
+          "stock": 12,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_b_ultra.jpg"
+          ]
      },
      {
-         "id": 10,
-         "title": "Smartphone C Pro",
-         "description": "A model with excellent performance and long battery life.",
-         "code": "SPCPRO987",
-         "price": 749.99,
-         "status": true,
-         "stock": 18,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_c_pro.jpg"
-         ]
+          "id": 10,
+          "title": "Smartphone C Pro",
+          "description": "A model with excellent performance and long battery life.",
+          "code": "SPCPRO987",
+          "price": 749.99,
+          "status": true,
+          "stock": 18,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_c_pro.jpg"
+          ]
      },
      {
-         "id": 11,
-         "title": "Laptop ROG Strix",
-         "description": "A gaming laptop with an Intel i9 processor and RTX 3070 graphics card.",
-         "code": "LROGSTRIX",
-         "price": 1899.99,
-         "status": true,
-         "stock": 7,
-         "category": "Computers",
-         "thumbnail": [
-             "images/laptop_rog_strix.jpg"
-         ]
+          "id": 11,
+          "title": "Laptop ROG Strix",
+          "description": "A gaming laptop with an Intel i9 processor and RTX 3070 graphics card.",
+          "code": "LROGSTRIX",
+          "price": 1899.99,
+          "status": true,
+          "stock": 7,
+          "category": "Computers",
+          "thumbnail": [
+               "images/laptop_rog_strix.jpg"
+          ]
      },
      {
-         "id": 12,
-         "title": "Laptop MacBook Air",
-         "description": "A slim and lightweight ultrabook with M2 chip and 256 GB of storage.",
-         "code": "LMBLAIRM2",
-         "price": 1499.99,
-         "status": true,
-         "stock": 30,
-         "category": "Computers",
-         "thumbnail": [
-             "images/laptop_macbook_air.jpg"
-         ]
+          "id": 12,
+          "title": "Laptop MacBook Air",
+          "description": "A slim and lightweight ultrabook with M2 chip and 256 GB of storage.",
+          "code": "LMBLAIRM2",
+          "price": 1499.99,
+          "status": true,
+          "stock": 30,
+          "category": "Computers",
+          "thumbnail": [
+               "images/laptop_macbook_air.jpg"
+          ]
      },
      {
-         "id": 13,
-         "title": "Smartphone D Max",
-         "description": "A smartphone with high performance and elegant design.",
-         "code": "SPDMAX741",
-         "price": 899.99,
-         "status": true,
-         "stock": 20,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_d_max.jpg"
-         ]
+          "id": 13,
+          "title": "Smartphone D Max",
+          "description": "A smartphone with high performance and elegant design.",
+          "code": "SPDMAX741",
+          "price": 899.99,
+          "status": true,
+          "stock": 20,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_d_max.jpg"
+          ]
      },
      {
-         "id": 14,
-         "title": "Smartphone E Plus",
-         "description": "Ideal for those looking for a balanced option between price and features.",
-         "code": "SPEPLUS852",
-         "price": 349.99,
-         "status": true,
-         "stock": 40,
-         "category": "Phones",
-         "thumbnail": [
-             "images/smartphone_e_plus.jpg"
-         ]
+          "id": 14,
+          "title": "Smartphone E Plus",
+          "description": "Ideal for those looking for a balanced option between price and features.",
+          "code": "SPEPLUS852",
+          "price": 349.99,
+          "status": true,
+          "stock": 40,
+          "category": "Phones",
+          "thumbnail": [
+               "images/smartphone_e_plus.jpg"
+          ]
      },
      {
-         "id": 15,
-         "title": "Laptop IdeaPad 3",
-         "description": "A laptop with an Intel i3 processor and 8 GB of RAM, perfect for daily tasks.",
-         "code": "LIDP3INT",
-         "price": 499.99,
-         "status": true,
-         "stock": 35,
-         "category": "Computers",
-         "thumbnail": [
-             "images/laptop_ideapad_3.jpg"
-         ]
+          "id": 15,
+          "title": "Laptop IdeaPad 3",
+          "description": "A laptop with an Intel i3 processor and 8 GB of RAM, perfect for daily tasks.",
+          "code": "LIDP3INT",
+          "price": 499.99,
+          "status": true,
+          "stock": 35,
+          "category": "Computers",
+          "thumbnail": [
+               "images/laptop_ideapad_3.jpg"
+          ]
      }
- ]
+]

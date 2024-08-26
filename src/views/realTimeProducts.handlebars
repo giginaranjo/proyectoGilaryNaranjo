@@ -1,3 +1,116 @@
-<h2>realtimeproducts</h2>
+<h1>Real time products</h1>
 <br>
 <a href="/">Product list</a>
+
+{{!-- Formulario para añadir producto --}}
+
+<form id="addProduct">
+
+    <h2>Create product</h2>
+
+    <label for="title">Title:</label>
+    <input type="text" name="title" id="title">
+
+    <label for="description">Description:</label>
+    <input type="text" name="Description" id="description">
+
+    <label for="code">Code:</label>
+    <input type="text" name="code" id="code">
+
+    <label for="price">Price:</label>
+    <input type="number" name="price" id="price">
+
+    <p>Status: True</p>
+
+    <label for="stock">Stock:</label>
+    <input type="number" name="stock" id="stock">
+
+    <label for="category">Category:</label>
+    <input type="text" name="category" id="category">
+
+    <label for="thumbnail">Thumbnail:</label>
+    <input type="text" name="thumbnail" id="thumbnail">
+
+    <p id="alertValidation"></p>
+
+    <button type="submit" id="btnAdd">Add</button>
+
+</form>
+
+{{!-- Formulario para buscar y modificar producto --}}
+
+<form id="modifyProduct">
+
+
+    <h2>Modify product</h2>
+
+    <label for="searchById">Search for the product to modify by its id:</label>
+    <input type="number" name="searchById" id="searchById">
+
+    <p>Complete the fields with the data you want to modify</p>
+
+    <label for="newTitle">Title:</label>
+    <input type="text" name="newTitle" id="newTitle">
+
+    <label for="newDescription">Description:</label>
+    <input type="text" name="newDescription" id="newDescription">
+
+    <label for="newCode">Code:</label>
+    <input type="text" name="newCode" id="newCode">
+
+    <label for="newPrice">Price:</label>
+    <input type="number" name="newPrice" id="newPrice">
+
+    <p>Status: True</p>
+
+    <label for="newStock">Stock:</label>
+    <input type="number" name="newStock" id="newStock">
+
+    <label for="newCategory">Category:</label>
+    <input type="text" name="newCategory" id="newCategory">
+
+    <label for="newThumbnail">Thumbnail:</label>
+    <input type="text" name="newThumbnail" id="newThumbnail">
+
+    <p id="alertModify"></p>
+
+    <button type="submit" id="btnModify">Modify product</button>
+
+
+</form>
+
+{{!-- Formulario para eliminar producto --}}
+
+<div id="inputDeleteProduct">
+
+    <h2>Delete product</h2>
+
+    <label for="deleteById">Search for the product to delete by its id:</label>
+    <input type="number" name="deleteById" id="deleteById">
+
+    <p id="alertDelete"></p>
+
+    <button id="btnDelete">Delete</button>
+
+</div>
+
+{{!-- Lista de productos --}}
+
+<h2>Product list</h2>
+
+<ul>
+    {{#each products}}
+    <li id="{{this.id}}">
+
+        <h3>{{this.title}}</h3>
+        <strong>Product information:</strong>
+        <p>Description: {{this.description}}</p>
+        <p>Code: {{this.code}}</p>
+        <h4>Price: ${{this.price}}</h4>
+        <p>Status: {{this.status}}</p>
+        <p>Stock: {{this.stock}}</p>
+        <p>Category: {{this.category}}</p>
+        <p>Thumbnail: {{this.thumbnail}}</p>
+    </li>
+    {{/each}}
+</ul>

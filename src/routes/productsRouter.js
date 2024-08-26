@@ -49,10 +49,24 @@ router.get("/:pid", async (req, res) => {
 
 
 router.post("/", async (req, res) => {
+    let products = await ProductsManager.getProducts()
     let newProduct = req.body
-    if (!newProduct.title.trim() || !newProduct.description.trim() || !newProduct.code.trim() || !newProduct.price || newProduct.price == " " || !newProduct.stock || newProduct.stock == " " || !newProduct.category.trim()) {
+    if (!newProduct.title.trim() || !newProduct.description.trim() || !newProduct.code.trim() || !newProduct.price  || newProduct.price == " " || !newProduct.stock || newProduct.stock == " " || !newProduct.category.trim()) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: 'Complete the required fields' })
+    }
+
+    if(newProduct.price <0 || newProduct.stock <0){
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: 'Enter a valid value'})
+    }
+
+    let titleExist = products.find(p => p.title === newProduct.title)
+    let codeExist = products.find(p => p.code === newProduct.code)
+
+    if (titleExist || codeExist ) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: 'The value entered already belongs to a product' })
     }
 
     try {
@@ -119,7 +133,7 @@ router.delete("/:pid", async (req, res) => {
 
         if (deletedProduct === 0) {
             res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json({ error: 'Ha ocurrido un error al intentar eliminar el producto.' })
+            return res.status(500).json({ error: 'An error occurred while trying to delete the product' })
         }
 
         res.setHeader('Content-Type', 'application/json');
