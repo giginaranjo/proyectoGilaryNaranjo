@@ -1,3 +1,5 @@
+const socket = io();
+
 /* Evento añadir producto */
 
 const btnAdd = document.getElementById("btnAdd")
@@ -12,7 +14,7 @@ btnAdd.addEventListener("click", async (e) => {
     let price = document.getElementById("price").value
     let stock = document.getElementById("stock").value
     let category = document.getElementById("category").value
-    let thumbnailInput = [document.getElementById("thumbnail").value]
+    let thumbnailInput = document.getElementById("thumbnail").value
 
 
     if (!title.trim() || !description.trim() || !code.trim() || !price || price == " " || !stock || stock == " " || !category.trim()) {
@@ -38,13 +40,15 @@ btnAdd.addEventListener("click", async (e) => {
         return
     }
 
-    let infoProduct = await fetch("/api/products", {
-        method: "post",
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ title, description, code, price, stock, category, thumbnail })
-    })
+
+    try {
+        alertValidation.textContent = "The product has been added successfully"
+        socket.emit("addProduct", { title, description, code, price, stock, category, thumbnail })
+    } catch (error) {
+        alertValidation.textContent = "An error occurred while trying to add the product";
+    }
+
+
 
     document.getElementById("title").value = ""
     document.getElementById("description").value = ""
@@ -54,7 +58,6 @@ btnAdd.addEventListener("click", async (e) => {
     document.getElementById("category").value = ""
     document.getElementById("thumbnail").value = ""
 
-    alertValidation.textContent = "The product has been added successfully"
 
     setTimeout(() => {
         alertValidation.textContent = ""
@@ -86,6 +89,15 @@ btnModify.addEventListener("click", async (e) => {
     let category = document.getElementById("newCategory").value
     let thumbnailInput = document.getElementById("newThumbnail").value
 
+    const validFields = [title, description, code, price, stock, category, ...thumbnailInput].some(value => value !== '' && value !== undefined && value !== null && (!Array.isArray(value) || value.length > 0))
+
+    if (!validFields) {
+        alertModify.textContent = 'Complete the required fields'
+        return
+    }
+
+    price = Number(parseFloat(price))
+    stock = Number(parseInt(stock))
 
     if (price < 0 || stock < 0) {
         alertModify.textContent = 'Enter a valid value'
@@ -93,6 +105,7 @@ btnModify.addEventListener("click", async (e) => {
     }
 
     let thumbnail = []
+
 
     if (thumbnailInput.trim() !== "") {
         thumbnail = thumbnailInput.split(",").map(i => i.trim()).filter(i => i !== "")
@@ -106,15 +119,25 @@ btnModify.addEventListener("click", async (e) => {
     }
 
 
-    let newInfoProduct = await fetch(`/api/products/${pid}`, {
-        method: "put",
-        headers: {
-            'Content-Type': 'application/json'
-        },
+    const existId = async (pid) => {
 
-        body: JSON.stringify({ title, description, code, price, stock, category, thumbnail })
-    })
+        try {
+            let response = await fetch(`/api/products/${pid}`)
+            if (response.ok) {
+                alertModify.textContent = "The product has been modified successfully"
+                socket.emit("modifyProduct", { pid, title, description, code, price, stock, category, thumbnail })
 
+                document.getElementById("searchById").value = ""
+            } else {
+                alertModify.textContent = "Product not found";
+            }
+        } catch (error) {
+            alertModify.textContent = "An error occurred while trying to modify the product";
+        }
+
+    }
+
+    existId(pid)
 
     document.getElementById("newTitle").value = ""
     document.getElementById("newDescription").value = ""
@@ -124,14 +147,6 @@ btnModify.addEventListener("click", async (e) => {
     document.getElementById("newCategory").value = ""
     document.getElementById("newThumbnail").value = ""
 
-
-    if (newInfoProduct.status == 400) {
-        alertModify.textContent = 'Product not found'
-        return
-    }
-
-
-    alertModify.textContent = "The product has been modified successfully"
 
     setTimeout(() => {
         alertModify.textContent = ""
@@ -156,23 +171,82 @@ btnDelete.addEventListener("click", async (e) => {
         return
     }
 
-    let deleteProduct = await fetch(`/api/products/${pid}`, {
-        method: "delete",
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
+    const existId = async (pid) => {
 
-    if (deleteProduct.status == 400) {
-        alertDelete.textContent = 'Product not found'
-        return
+        let response = await fetch(`/api/products/${pid}`)
+        try {
+            if (response.ok) {
+
+                alertDelete.textContent = "The product has been successfully removed"
+                socket.emit("deleteProduct", { pid })
+
+                document.getElementById("deleteById").value = ""
+            } else {
+                alertDelete.textContent = "Product not found";
+            }
+        } catch (error) {
+            alertDelete.textContent = "An error occurred while trying to modify the product";
+        }
+
     }
 
-    document.getElementById("deleteById").value = ""
-    alertDelete.textContent = "The product has been successfully removed"
+    existId(pid)
 
     setTimeout(() => {
         alertDelete.textContent = ""
     }, 3000);
+
+})
+
+
+/* Actualización lista de productos */
+
+socket.on("addProduct", (data) => {
+    if (data.status === "success") {
+        console.log("The product has been added successfully");
+    } else {
+        console.log("An error occurred while trying to add the product");
+    }
+})
+
+socket.on("modifyProduct", (data) => {
+    if (data.status === "success") {
+        console.log("The product has been modified successfully");
+    } else {
+        console.log("An error occurred while trying to modify the product");
+    }
+})
+
+socket.on("deleteProduct", (data) => {
+    if (data.status === "success") {
+        console.log("The product has been successfully removed");
+    } else {
+        console.log("An error occurred while trying to remove the product");
+    }
+})
+
+socket.on("updateProducts", (products) => {
+
+    let productList = document.getElementById("list")
+    productList.innerHTML = ""
+
+    products.forEach(p => {
+        const li = document.createElement("li")
+        li.id = p.id
+
+        li.innerHTML = `
+        <h3>${p.title}</h3>
+        <strong>Product information:</strong>
+        <p>Description: ${p.description}</p>
+        <p>Code: ${p.code}</p>
+        <h4>Price: $${p.price}</h4>
+        <p>Status: ${p.status}</p>
+        <p>Stock: ${p.stock}</p>
+        <p>Category: ${p.category}</p>
+        <p>Thumbnail: ${p.thumbnail}</p>
+        `
+
+        productList.appendChild(li)
+    })
 
 })

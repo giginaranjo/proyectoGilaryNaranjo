@@ -25,7 +25,7 @@ export default class ProductsManager {
         let id = (products.length > 0) ? products[products.length - 1].id + 1 : 1;
         let status = true;
 
-        let { title, description, code, price, stock, category, thumbnail } = newProduct
+        let {title, description, code, price, stock, category, thumbnail} = newProduct
 
         price = parseFloat(price)
         stock = parseInt(stock)
@@ -41,6 +41,7 @@ export default class ProductsManager {
             category,
             thumbnail
         }
+
         products.push(addedProduct)
 
         await fs.promises.writeFile(dbProducts, JSON.stringify(products, null, 5))
@@ -60,7 +61,7 @@ export default class ProductsManager {
         products[indexProduct] = {
             id,
             ...products[indexProduct],
-            ...Object.fromEntries(Object.entries(modification).filter(([key, value]) => value !== '' && value !== undefined && value !== null))
+            ...Object.fromEntries(Object.entries(modification).filter(([key, value]) => value !== '' && value !== undefined && value !== null && key !== "pid" && (!Array.isArray(value) || value.length > 0 )))
         }
 
         await fs.promises.writeFile(dbProducts, JSON.stringify(products, null, 5))

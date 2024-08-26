@@ -49,24 +49,22 @@ router.get("/:pid", async (req, res) => {
 
 
 router.post("/", async (req, res) => {
-    let products = await ProductsManager.getProducts()
+
     let newProduct = req.body
-    if (!newProduct.title.trim() || !newProduct.description.trim() || !newProduct.code.trim() || !newProduct.price  || newProduct.price == " " || !newProduct.stock || newProduct.stock == " " || !newProduct.category.trim()) {
+    if (!newProduct.title.trim() || !newProduct.description.trim() || !newProduct.code.trim() || !newProduct.price || newProduct.price == " " || !newProduct.stock || newProduct.stock == " " || !newProduct.category.trim()) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: 'Complete the required fields' })
     }
 
-    if(newProduct.price <0 || newProduct.stock <0){
+    if (newProduct.price < 0 || newProduct.stock < 0) {
         res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'Enter a valid value'})
+        return res.status(400).json({ error: 'Enter a valid value' })
     }
 
-    let titleExist = products.find(p => p.title === newProduct.title)
-    let codeExist = products.find(p => p.code === newProduct.code)
-
-    if (titleExist || codeExist ) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'The value entered already belongs to a product' })
+    if (newProduct.thumbnail) {
+        newProduct.thumbnail = newProduct.thumbnail.split(",").map(i => i.trim()).filter(i => i !== "")
+    } else {
+        newProduct.thumbnail = []
     }
 
     try {
@@ -83,8 +81,6 @@ router.post("/", async (req, res) => {
             }
         )
     }
-
-
 })
 
 router.put("/:pid", async (req, res) => {
@@ -98,6 +94,28 @@ router.put("/:pid", async (req, res) => {
 
     let modification = req.body
     delete modification.id
+
+    const validFields = Object.values(modification).some(value => value !== '' && value !== undefined && value !== null && (!Array.isArray(value) || value.length > 0))
+
+    if (!validFields) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: 'Complete the required fields' })
+    }
+
+
+    if (modification.price < 0 || modification.stock < 0) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: 'Enter a valid value' })
+    }
+
+    if (modification.price) {
+        modification.price = Number(parseFloat(modification.price))
+    }
+    
+    if(modification.stock){
+        modification.stock = Number(parseInt(modification.stock))
+    }
+    
 
     try {
         let modifiedProduct = await ProductsManager.modifyProduct(pid, modification)
@@ -125,7 +143,6 @@ router.delete("/:pid", async (req, res) => {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: `Product not found` })
     }
-    console.log(product);
 
     try {
         let deletedProduct = await ProductsManager.deleteProduct(pid)
