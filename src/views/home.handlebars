@@ -2,16 +2,17 @@
 
 <h1 class="titulo">Product list</h1>
 
-<div>
+<div class="menu">
     <a href="/">Home</a>
     <a href="/realTimeProducts">Real time products</a>
 </div>
 
 
-<ul id = "list">
+<ul id="list" class="list">
     {{#each products}}
-    <li id="{{this.id}}">
+    <li id="{{this.id}}" class="item">
 
+        <img src="{{this.thumbnail}}" alt="{{this.thumbnail}}">
         <h3>{{this.title}}</h3>
         <strong>Product information:</strong>
         <p>Description: {{this.description}}</p>
@@ -20,8 +21,7 @@
         <p>Status: {{this.status}}</p>
         <p>Stock: {{this.stock}}</p>
         <p>Category: {{this.category}}</p>
-        <p>Thumbnail: {{this.thumbnail}}</p>
-
+        
     </li>
     {{/each}}
 </ul>

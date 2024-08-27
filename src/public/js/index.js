@@ -233,8 +233,10 @@ socket.on("updateProducts", (products) => {
     products.forEach(p => {
         const li = document.createElement("li")
         li.id = p.id
+        li.classList.add("item")
 
         li.innerHTML = `
+        <img src="${p.thumbnail}" alt="${p.thumbnail}">
         <h3>${p.title}</h3>
         <strong>Product information:</strong>
         <p>Description: ${p.description}</p>
@@ -243,7 +245,6 @@ socket.on("updateProducts", (products) => {
         <p>Status: ${p.status}</p>
         <p>Stock: ${p.stock}</p>
         <p>Category: ${p.category}</p>
-        <p>Thumbnail: ${p.thumbnail}</p>
         `
 
         productList.appendChild(li)
