@@ -2,6 +2,7 @@
   "name": "proyectogilarynaranjo",
   "version": "1.0.0",
   "type": "module",
+  "node": "16.x",
   "main": "index.js",
   "scripts": {
     "start": "node ./src/app.js",
