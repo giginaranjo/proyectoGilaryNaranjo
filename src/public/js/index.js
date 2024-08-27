@@ -121,23 +121,30 @@ btnModify.addEventListener("click", async (e) => {
 
     const existId = async (pid) => {
 
+        let response = await fetch(`/api/products/${pid}`)
         try {
-            let response = await fetch(`/api/products/${pid}`)
             if (response.ok) {
-                alertModify.textContent = "The product has been modified successfully"
-                socket.emit("modifyProduct", { pid, title, description, code, price, stock, category, thumbnail })
-
-                document.getElementById("searchById").value = ""
+               return true
             } else {
-                alertModify.textContent = "Product not found";
+                return false
             }
         } catch (error) {
-            alertModify.textContent = "An error occurred while trying to modify the product";
+            alertDelete.textContent = "An error occurred while trying to remove the product";
+            return false
         }
 
     }
 
-    existId(pid)
+    let responseId = await existId(pid)
+
+    if (responseId) {
+        alertModify.textContent = "The product has been modified successfully"
+        socket.emit("modifyProduct", { pid, title, description, code, price, stock, category, thumbnail })
+
+        document.getElementById("searchById").value = ""
+    } else {
+        alertModify.textContent = "Product not found";
+    }
 
     document.getElementById("newTitle").value = ""
     document.getElementById("newDescription").value = ""
@@ -176,21 +183,28 @@ btnDelete.addEventListener("click", async (e) => {
         let response = await fetch(`/api/products/${pid}`)
         try {
             if (response.ok) {
-
-                alertDelete.textContent = "The product has been successfully removed"
-                socket.emit("deleteProduct", { pid })
-
-                document.getElementById("deleteById").value = ""
+               return true
             } else {
-                alertDelete.textContent = "Product not found";
+                return false
             }
         } catch (error) {
-            alertDelete.textContent = "An error occurred while trying to modify the product";
+            alertDelete.textContent = "An error occurred while trying to remove the product";
+            return false
         }
 
     }
 
-    existId(pid)
+    let responseId = await existId(pid)
+
+    if (responseId) {
+        alertDelete.textContent = "The product has been successfully removed"
+        socket.emit("deleteProduct", { pid })
+
+        document.getElementById("deleteById").value = ""
+    } else {
+        alertDelete.textContent = "Product not found";
+    }
+
 
     setTimeout(() => {
         alertDelete.textContent = ""
