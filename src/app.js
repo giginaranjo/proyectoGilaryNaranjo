@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
         try {
             const addedProduct = await ProductsManager.addProduct(data)
             socket.emit("addProduct", { status: "success", addedProduct })
-          updateProducts()
+            updateProducts()
         } catch (error) {
             socket.emit("addProduct", { status: "error", message: error.message })
         }
@@ -62,7 +62,7 @@ io.on("connection", (socket) => {
         try {
             const modifiedProduct = await ProductsManager.modifyProduct(data.pid, data)
             socket.emit("modifyProduct", { status: "success", modifiedProduct })
-        
+            updateProducts()
         } catch (error) {
             socket.emit("modifyProduct", { status: "error", message: error.message })
         }
@@ -72,7 +72,7 @@ io.on("connection", (socket) => {
         try {
             const deletedProduct = await ProductsManager.deleteProduct(data.pid)
             socket.emit("deleteProduct", { status: "success", deletedProduct })
-          
+            updateProducts()
         } catch (error) {
             socket.emit("deleteProduct", { status: "error", message: error.message })
         }

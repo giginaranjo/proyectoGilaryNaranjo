@@ -12,7 +12,7 @@
 
         <h2>Create product</h2>
 
-        <p class="pExtras" >Complete the fields with the data to add the product:</p>
+        <p class="pExtras">Complete the fields with the data to add the product:</p>
 
         <label for="title">Title:</label>
         <input type="text" name="title" id="title">
@@ -53,7 +53,7 @@
         <label for="searchById" class="iExtras">Search for the product to modify by its id:</label>
         <input type="number" name="searchById" id="searchById">
 
-        <p class="pExtras" >Complete the fields with the data you want to modify:</p>
+        <p class="pExtras">Complete the fields with the data you want to modify:</p>
 
         <label for="newTitle">Title:</label>
         <input type="text" name="newTitle" id="newTitle">
@@ -110,7 +110,10 @@
         {{#each products}}
         <li id="{{this.id}}" class="item">
 
-            <img src="{{this.thumbnail}}" alt="{{this.thumbnail}}">
+            {{!-- Thumbnail sería: <img src="{{this.thumbnail}}" alt="{{this.thumbnail}}"> si tuviera las imagenes (son
+            nombres inventados) --}}
+
+            <p>{{this.thumbnail}}</p>
             <h3>{{this.title}}</h3>
             <strong>Product information:</strong>
             <p>Description: {{this.description}}</p>

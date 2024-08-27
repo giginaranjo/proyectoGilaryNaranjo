@@ -124,7 +124,7 @@ btnModify.addEventListener("click", async (e) => {
         let response = await fetch(`/api/products/${pid}`)
         try {
             if (response.ok) {
-               return true
+                return true
             } else {
                 return false
             }
@@ -183,7 +183,7 @@ btnDelete.addEventListener("click", async (e) => {
         let response = await fetch(`/api/products/${pid}`)
         try {
             if (response.ok) {
-               return true
+                return true
             } else {
                 return false
             }
@@ -249,8 +249,11 @@ socket.on("updateProducts", (products) => {
         li.id = p.id
         li.classList.add("item")
 
+        /* Thumbnail sería: <img src="${p.thumbnail}" alt="${p.thumbnail}"> si tuviera las imagenes (son nombres inventados)*/ 
+
         li.innerHTML = `
-        <img src="${p.thumbnail}" alt="${p.thumbnail}">
+        
+        <p>${p.thumbnail}</p>
         <h3>${p.title}</h3>
         <strong>Product information:</strong>
         <p>Description: ${p.description}</p>
