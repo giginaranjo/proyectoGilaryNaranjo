@@ -3,14 +3,17 @@ import path from "path";
 import express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
+import { config } from "./config/config.js";
 
 import productsRouter from "./routes/productsRouter.js";
 import cartsRouter from "./routes/cartsRouter.js";
 import viewsRouter from "./routes/viewsRouter.js";
-import ProductsManager from "./dao/productManager.js";
+// import ProductsManager from "./dao/productManager.js";
+import {MongoProductsManager as ProductsManager} from "./dao/mongoProductManager.js";
+import { connDB } from "./connDB.js";
 
 
-const PORT = 8080;
+const PORT = config.PORT;
 const app = express();
 
 app.engine("handlebars", engine())
@@ -30,6 +33,8 @@ app.use("/", viewsRouter)
 const server = app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
 });
+
+connDB()
 
 const io = new Server(server)
 

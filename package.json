@@ -2,7 +2,9 @@
   "name": "proyectogilarynaranjo",
   "version": "1.0.0",
   "type": "module",
-  "engines": { "node": "16.x" },
+  "engines": {
+    "node": "16.x"
+  },
   "main": "index.js",
   "scripts": {
     "start": "node ./src/app.js",
@@ -16,6 +18,9 @@
   "dependencies": {
     "express": "^4.19.2",
     "express-handlebars": "^8.0.1",
+    "mongodb": "^6.8.1",
+    "mongoose": "^8.6.1",
+    "mongosh": "^2.3.1",
     "socket.io": "^4.7.5"
   }
 }

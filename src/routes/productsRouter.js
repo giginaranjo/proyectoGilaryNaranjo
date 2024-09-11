@@ -1,8 +1,13 @@
 import { Router } from "express";
-import ProductsManager from "../dao/productManager.js"
+// import ProductsManager from "../dao/productManager.js"
+import { MongoProductsManager as ProductsManager } from "../dao/mongoProductManager.js";
+import { productsModel } from "../dao/models/productModel.js";
+import { isValidObjectId } from "mongoose";
 
 const router = Router()
 
+
+// OBTENER PRODUCTOS
 router.get("/", async (req, res) => {
     let products
     try {
@@ -20,9 +25,10 @@ router.get("/", async (req, res) => {
             detalle: `${error.message}`
         });
     }
-
 })
 
+
+// OBTENER PRODUCTO POR ID
 router.get("/:pid", async (req, res) => {
     try {
         let products = await ProductsManager.getProducts()
@@ -44,13 +50,14 @@ router.get("/:pid", async (req, res) => {
             }
         )
     }
-
 })
 
 
+// CREAR/AÑADIR PRODUCTO
 router.post("/", async (req, res) => {
-
     let newProduct = req.body
+
+    // Validaciones de campo y formato
     if (!newProduct.title.trim() || !newProduct.description.trim() || !newProduct.code.trim() || !newProduct.price || newProduct.price == " " || !newProduct.stock || newProduct.stock == " " || !newProduct.category.trim()) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: 'Complete the required fields' })
@@ -61,17 +68,13 @@ router.post("/", async (req, res) => {
         return res.status(400).json({ error: 'Enter a valid value' })
     }
 
-    if (newProduct.thumbnail) {
-        newProduct.thumbnail = newProduct.thumbnail.split(",").map(i => i.trim()).filter(i => i !== "")
-    } else {
-        newProduct.thumbnail = []
-    }
-
+    // LLamado del manager (guardado del nuevo producto)
     try {
         let addedProduct = await ProductsManager.addProduct(newProduct)
 
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ addedProduct })
+        return res.status(201).json({ addedProduct })
+
     } catch (error) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(500).json(
@@ -83,40 +86,48 @@ router.post("/", async (req, res) => {
     }
 })
 
+
+// MODIFICAR PRODUCTO
 router.put("/:pid", async (req, res) => {
     let { pid } = req.params
-    let products = await ProductsManager.getProducts()
-    let product = products.find(p => p.id === parseInt(pid));
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(pid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid id format` })
+    }
+
+    // Validación existencia de producto por id
+    let product = await productsModel.findById(pid);
     if (!product) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: `Product not found` })
     }
 
+
     let modification = req.body
-    delete modification.id
+    delete modification._id
 
-    const validFields = Object.values(modification).some(value => value !== '' && value !== undefined && value !== null && (!Array.isArray(value) || value.length > 0))
 
+    // Validaciones de campo y formato
+    const validFields = Object.values(modification).some(value => value !== "" && value !== undefined && value !== null && (!Array.isArray(value) || value.length > 0))
     if (!validFields) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: 'Complete the required fields' })
     }
 
-
-    if (modification.price < 0 || modification.stock < 0) {
+    if (modification.price === null || modification.price === "" || modification.price < 0) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: 'Enter a valid value' })
     }
 
-    if (modification.price) {
-        modification.price = Number(parseFloat(modification.price))
+    if (modification.stock === null || modification.stock === "" || modification.stock < 0) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: 'Enter a valid value' })
     }
-    
-    if(modification.stock){
-        modification.stock = Number(parseInt(modification.stock))
-    }
-    
 
+
+    // LLamado del manager (guardado de items modificados)
     try {
         let modifiedProduct = await ProductsManager.modifyProduct(pid, modification)
         res.setHeader('Content-Type', 'application/json');
@@ -131,22 +142,29 @@ router.put("/:pid", async (req, res) => {
             }
         )
     }
-
-
 })
 
+
+// ELIMINACIÓN DE PRODUCTO
 router.delete("/:pid", async (req, res) => {
     let { pid } = req.params
-    let products = await ProductsManager.getProducts()
-    let product = products.find(p => p.id === parseInt(pid));
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(pid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid id format` })
+    }
+
+    // Validación existencia de producto por id
+    let product = await productsModel.findById(pid);
     if (!product) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: `Product not found` })
     }
 
+    // LLamado del manager (eliminación de producto por id)
     try {
         let deletedProduct = await ProductsManager.deleteProduct(pid)
-        console.log(deletedProduct);
 
         if (deletedProduct === 0) {
             res.setHeader('Content-Type', 'application/json');

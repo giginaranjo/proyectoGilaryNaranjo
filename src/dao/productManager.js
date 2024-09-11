@@ -1,8 +1,8 @@
 import fs from "fs";
 import path from "path";
+import { config } from "../config/config.js";
 
-const dbProducts = path.resolve("./src/data/products.json");
-
+const dbProducts = path.resolve(config.PRODUCTS_PATH);
 
 export default class ProductsManager {
 
