@@ -11,10 +11,10 @@ export const router = Router()
 router.get("/", async (req, res) => {
 
     let { page, limit, sort, ...filters } = req.query
-
-    // Validaciones de existencia y formato
-    if (!limit || isNaN(Number(limit))) {
-        limit = 20
+    
+     // Validaciones de existencia y formato
+     if (!limit || isNaN(Number(limit))) {
+        limit = 10
     }
     if (!page || isNaN(Number(page))) {
         page = 1
@@ -31,7 +31,6 @@ router.get("/", async (req, res) => {
             res.setHeader('Content-Type', 'application/json');
             return res.status(400).json({ error: `Invalid sort value` })
         }
-
         sort = { price: sortBy }
     }
 
@@ -46,7 +45,7 @@ router.get("/", async (req, res) => {
     })
 
     try {
-        
+
         let product = await ProductsManager.getProductsBy(filter);
         if (!product) {
             res.setHeader('Content-Type', 'application/json');

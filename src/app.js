@@ -1,4 +1,4 @@
-import {__dirname} from "./utils.js";
+import { __dirname} from "./utils.js";
 import path from "path";
 import express from "express";
 import { Server } from "socket.io";
@@ -6,11 +6,11 @@ import { engine } from "express-handlebars";
 import { config } from "./config/config.js";
 import { connDB } from "./connDB.js";
 
-import {router as productsRouter} from "./routes/productsRouter.js";
-import {router as cartsRouter} from "./routes/cartsRouter.js";
-import {router as viewsRouter} from "./routes/viewsRouter.js";
+import { router as productsRouter } from "./routes/productsRouter.js";
+import { router as cartsRouter } from "./routes/cartsRouter.js";
+import { router as viewsRouter } from "./routes/viewsRouter.js";
 // import ProductsManager from "./dao/productManager.js";
-import {ProductsManagerMongo as ProductsManager} from "./dao/productManagerMongo.js";
+import { ProductsManagerMongo as ProductsManager } from "./dao/productManagerMongo.js";
 
 
 const PORT = config.PORT;
@@ -40,7 +40,7 @@ const io = new Server(server)
 
 const updateProducts = async () => {
     try {
-        let products = await ProductsManager.getProducts()
+        let products = await ProductsManager.get()
         io.emit("updateProducts", products)
     } catch (error) {
         console.log(error.message);
@@ -65,7 +65,7 @@ io.on("connection", (socket) => {
 
     socket.on("modifyProduct", async (data) => {
         try {
-            const modifiedProduct = await ProductsManager.modifyProduct(data.pid, data)
+            const modifiedProduct = await ProductsManager.modifyProduct(data.pid, { ...data })
             socket.emit("modifyProduct", { status: "success", modifiedProduct })
             updateProducts()
         } catch (error) {

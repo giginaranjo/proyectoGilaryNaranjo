@@ -1,7 +1,7 @@
 <h1 class="titulo">Real time products</h1>
 
 <div class="menu">
-    <a href="/">Home</a>
+    <a href="/products">Home</a>
     <a href="/realTimeProducts">Real time products</a>
 </div>
 
@@ -51,7 +51,7 @@
         <h2>Modify product</h2>
 
         <label for="searchById" class="iExtras">Search for the product to modify by its id:</label>
-        <input type="number" name="searchById" id="searchById">
+        <input type="text" name="searchById" id="searchById">
 
         <p class="pExtras">Complete the fields with the data you want to modify:</p>
 
@@ -92,7 +92,7 @@
         <h2>Delete product</h2>
 
         <label for="deleteById" class="iExtras">Search for the product to delete by its id:</label>
-        <input type="number" name="deleteById" id="deleteById">
+        <input type="text" name="deleteById" id="deleteById">
 
         <p id="alertDelete" class="alerta"></p>
 
@@ -127,3 +127,6 @@
         {{/each}}
     </ul>
 </div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/realTimeProducts.js"></script>

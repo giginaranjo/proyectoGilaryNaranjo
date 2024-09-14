@@ -138,3 +138,8 @@ span{
     background-color: #c66bff82;
     padding: 10px;
 }
+
+.disabled{
+    pointer-events: none;
+    color: #c66bff61;
+}
