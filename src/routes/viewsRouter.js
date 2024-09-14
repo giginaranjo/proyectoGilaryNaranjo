@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ProductsManager from "../dao/productManager.js"
 
-const router = Router()
+export const router = Router()
 
 // Obtener listado de productos
 
@@ -37,4 +37,3 @@ router.get("/realTimeProducts", async(req, res) => {
 
 })
 
-export default router;

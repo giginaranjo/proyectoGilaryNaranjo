@@ -1,92 +1,123 @@
 import { Router } from "express";
-import CartsManager from "../dao/cartsManager.js";
+/* import CartsManager from "../dao/cartsManager.js"; */
+import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js";
+import { ProductsManagerMongo as ProductsManager } from "../dao/productManagerMongo.js";
+import { isValidObjectId } from "mongoose";
+import { catchError } from "../utils.js";
 
-const router = Router()
 
+export const router = Router()
+
+//OBTENER CARRITOS
 router.get("/", async (req, res) => {
-    let carts
     try {
-        carts = await CartsManager.getCarts()
+        let carts = await CartsManager.getCarts()
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json(carts)
 
     } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json({
-            error: `Error inesperado en el servidor. Intente más tarde.`,
-            detalle: `${error.message}`
-        });
+        return catchError(res, error)
     }
 
 })
 
-router.post("/", async (req, res) => {
-    let newCart = req.body
 
-    if (newCart.product.length === 0 || !Array.isArray(newCart.product)) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'Check and re-enter the required fields' })
-    } 
-
-    try {
-        let addedCart = await CartsManager.createCart(newCart)
-
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ addedCart })
-    } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json(
-            {
-                error: 'Error inesperado en el servidor. Intente más tarde.',
-                detalle: `${error.message}`
-            }
-        )
-    }
-})
-
+//OBTENER CARRITOS POR ID
 router.get("/:cid", async (req, res) => {
+    let { cid } = req.params
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(cid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid id format` })
+    }
+
+    // Validación existencia de carrito por id
+    let cartExist = await CartsManager.getCartsBy(cid);
+    if (!cartExist) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Cart not found` })
+    }
+
+    // Llamado al manager (mostrar producto)
     try {
-        let carts = await CartsManager.getCarts()
-        let cart = carts.find(c => c.id === parseInt(req.params.cid));
+        let cart = await CartsManager.getCartsBy(cid)
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json({ cart })
+
+    } catch (error) {
+        return catchError(res, error)
+    }
+})
+
+
+//CREAR CARRITO
+router.post("/", async (req, res) => {
+    try {
+        let addedCart = await CartsManager.createCart()
+
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(201).json({ addedCart })
+    } catch (error) {
+        return catchError(res, error)
+    }
+})
+
+
+//AÑADIR PRODUCTO AL CARRITO
+router.post("/:cid/product/:pid", async (req, res) => {
+    let { cid, pid } = req.params
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(cid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid cart id format` })
+    }
+    if (!isValidObjectId(pid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid product id format` })
+    }
+
+    try {
+        // Validación existencia de carrito en coll. por id
+        let cart = await CartsManager.getCartsBy(cid);
         if (!cart) {
             res.setHeader('Content-Type', 'application/json');
-            return res.status(404).json({ error: `Product not found` })
+            return res.status(400).json({ error: `Cart not found` })
         }
 
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json(cart)
+        // Validación existencia de producto en coll. por id
+        let product = await ProductsManager.getProductsBy({ _id: pid })
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found` })
+        }
+
+        // Validación existencia de producto en carrito por indice
+        let productExist = cart.products.findIndex(p => p.product._id == pid)
+        if (productExist === -1) {
+            cart.products.push(
+                {
+                    product: pid,
+                    quantity: 1
+                }
+            )
+        } else {
+            cart.products[productExist].quantity++
+        }
+
+        // Llamado al manager (añadir producto a carrito)
+        let addedProduct = await CartsManager.addProduct(cid, cart)
+        if (addedProduct.modifiedCount > 0) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(200).json({ message: 'Product added successfully' })
+        } else {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: 'An error occurred while trying to add the product' })
+        }
 
     } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json(
-            {
-                error: 'Error inesperado en el servidor. Intente más tarde.',
-                detalle: `${error.message}`
-            }
-        )
+        return catchError(res, error)
     }
 })
 
-
-router.post("/:cid/product/:pid", async (req, res) => {
-    let cid = parseInt(req.params.cid)
-    let pid = parseInt(req.params.pid) 
-
-    try {
-        let addedProduct = await CartsManager.addProduct(cid, pid)
-        
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({message: 'Product added successfully', cart: addedProduct })
-
-    } catch (error) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(500).json(
-            {
-                error: 'Error inesperado en el servidor. Intente más tarde.',
-                detalle: `${error.message}`
-            }
-        )
-    }
-})
-
-export default router;

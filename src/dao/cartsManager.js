@@ -25,11 +25,11 @@ export default class CartsManager {
         let carts = await this.getCarts()
         let id = (carts.length > 0) ? carts[carts.length - 1].id + 1 : 100;
 
-        let {product} = newCart
+        let {products} = newCart
 
         let cartCreated = {
             id,
-            product
+            products
         }
         carts.push(cartCreated)
 
@@ -47,23 +47,20 @@ export default class CartsManager {
             return { success: false, message: 'Cart not found' };
         }
 
-        let products = await ProductsManager.getProducts()
-        let product = products.find(p => p.id === parseInt(idProduct));
-        if (!product) {
+        let productsColl = await ProductsManager.getProducts()
+        let products = productsColl.find(p => p.id === parseInt(idProduct));
+        if (!products) {
             return { success: false, message: 'Product not found' };
         }
 
-        let addProduct = cart.product.find(p => p.id === idProduct)
+        let addProduct = cart.products.find(p => p.id === idProduct)
 
 
         if (!addProduct) {
-            cart.product.push({id: idProduct, quantity: 1})
+            cart.products.push({id: idProduct, quantity: 1})
         } else {
             addProduct.quantity += 1
         }
-
-        console.log(addProduct);
-        
 
         await fs.promises.writeFile(dbCarts, JSON.stringify(carts, null, 5))
         return cart

@@ -1,16 +1,16 @@
-import __dirname from "./utils.js";
+import {__dirname} from "./utils.js";
 import path from "path";
 import express from "express";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { config } from "./config/config.js";
-
-import productsRouter from "./routes/productsRouter.js";
-import cartsRouter from "./routes/cartsRouter.js";
-import viewsRouter from "./routes/viewsRouter.js";
-// import ProductsManager from "./dao/productManager.js";
-import {MongoProductsManager as ProductsManager} from "./dao/mongoProductManager.js";
 import { connDB } from "./connDB.js";
+
+import {router as productsRouter} from "./routes/productsRouter.js";
+import {router as cartsRouter} from "./routes/cartsRouter.js";
+import {router as viewsRouter} from "./routes/viewsRouter.js";
+// import ProductsManager from "./dao/productManager.js";
+import {ProductsManagerMongo as ProductsManager} from "./dao/productManagerMongo.js";
 
 
 const PORT = config.PORT;

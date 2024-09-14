@@ -1,11 +1,17 @@
 import { productsModel } from "./models/productModel.js"
 
-export class MongoProductsManager {
+export class ProductsManagerMongo {
 
     // Obtener productos
 
-    static async getProducts() {
-       return await productsModel.find().lean()
+    static async getProducts(filter={}, page=1, limit=10, sort={}) {
+       return await productsModel.paginate(filter, {lean:true, page, limit, sort})
+    }
+
+    // Obtener productos por id
+
+    static async getProductsBy(filter={}) {
+        return await productsModel.findOne(filter)
     }
 
     // Añadir productos
