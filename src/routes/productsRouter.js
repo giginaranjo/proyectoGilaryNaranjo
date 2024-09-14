@@ -2,6 +2,7 @@ import { Router } from "express";
 // import ProductsManager from "../dao/productManager.js"
 import { ProductsManagerMongo as ProductsManager } from "../dao/productManagerMongo.js";
 import { isValidObjectId } from "mongoose";
+import { catchError } from "../utils.js";
 
 export const router = Router()
 
@@ -19,22 +20,6 @@ router.get("/", async (req, res) => {
         page = 1
     }
 
-    // Filtro (category)
-    let filter = {}
-
-    Object.keys(filters).forEach(key => {
-        const keyLower = key.toLowerCase()
-        if (keyLower === "category") {
-            filter[keyLower] = filters[keyLower].toUpperCase()
-        } 
-    })
-    
-    let product = await ProductsManager.getProductsBy(filter);
-    if (!product) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `Category not found` })
-    }
-
     // Ordenar por (asc or desc)
     if (sort) {
         let sortBy;
@@ -50,11 +35,27 @@ router.get("/", async (req, res) => {
         sort = { price: sortBy }
     }
 
-    // LLamado al manager (mostrar productos)
+    // Filtro (category)
+    let filter = {}
+
+    Object.keys(filters).forEach(key => {
+        const keyLower = key.toLowerCase()
+        if (keyLower === "category") {
+            filter[keyLower] = filters[keyLower].toUpperCase()
+        }
+    })
+
     try {
+        
+        let product = await ProductsManager.getProductsBy(filter);
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Category not found` })
+        }
+
 
         let products = await ProductsManager.getProducts(filter, page, limit, sort)
-        
+
         products.products = products.docs
         delete products.docs
         delete products.totalDocs
@@ -111,7 +112,7 @@ router.post("/", async (req, res) => {
         return res.status(400).json({ error: 'Enter a valid value' })
     }
 
-    // LLamado al manager (guardado del nuevo producto)
+
     try {
         let addedProduct = await ProductsManager.addProduct(newProduct)
 
@@ -134,38 +135,35 @@ router.put("/:pid", async (req, res) => {
         return res.status(400).json({ error: `Invalid id format` })
     }
 
-    // Validación existencia de producto por id
-    let product = await ProductsManager.getFilterProducts({ _id: pid });
-    if (!product) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `Product not found` })
-    }
-
-
-    let modification = req.body
-    delete modification._id
-
-
-    // Validaciones de campo y formato
-    const validFields = Object.values(modification).some(value => value !== "" && value !== undefined && value !== null && (!Array.isArray(value) || value.length > 0))
-    if (!validFields) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'Complete the required fields' })
-    }
-
-    if (modification.price === null || modification.price === "" || modification.price < 0) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'Enter a valid value' })
-    }
-
-    if (modification.stock === null || modification.stock === "" || modification.stock < 0) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'Enter a valid value' })
-    }
-
-
-    // LLamado al manager (guardado de items modificados)
     try {
+        // Validación existencia de producto por id
+        let product = await ProductsManager.getProductsBy({ _id: pid });
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found` })
+        }
+
+        let modification = req.body
+        delete modification._id
+
+        // Validaciones de campo y formato
+        const validFields = Object.values(modification).some(value => value !== "" && value !== undefined && value !== null && (!Array.isArray(value) || value.length > 0))
+        if (!validFields) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: 'Complete the required fields' })
+        }
+
+        if (modification.price === null || modification.price === "" || modification.price < 0) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: 'Enter a valid value' })
+        }
+
+        if (modification.stock === null || modification.stock === "" || modification.stock < 0) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: 'Enter a valid value' })
+        }
+
+
         let modifiedProduct = await ProductsManager.modifyProduct(pid, modification)
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json({ modifiedProduct })
@@ -186,24 +184,25 @@ router.delete("/:pid", async (req, res) => {
         return res.status(400).json({ error: `Invalid id format` })
     }
 
-    // Validación existencia de producto por id
-    let product = await ProductsManager.getFilterProducts({ _id: pid });
-    if (!product) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `Product not found` })
-    }
-
-    // LLamado al manager (eliminación de producto por id)
     try {
-        let deletedProduct = await ProductsManager.deleteProduct(pid)
 
+        // Validación existencia de producto por id
+        let product = await ProductsManager.getProductsBy({ _id: pid });
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found` })
+        }
+
+
+
+        let deletedProduct = await ProductsManager.deleteProduct(pid)
         if (deletedProduct === 0) {
             res.setHeader('Content-Type', 'application/json');
             return res.status(500).json({ error: 'An error occurred while trying to delete the product' })
         }
 
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ payload: "El producto ha sido eliminado." })
+        return res.status(200).json({ payload: "The product has been removed" })
 
     } catch (error) {
         return catchError(res, error)

@@ -13,17 +13,18 @@ export const cartSchema = new mongoose.Schema(
                 }
             ]
         }
-    },
-    {
-        timestamps: true
     }
 )
 
 cartSchema.pre("find", function() {
     this.populate("products.product").lean()
-})
+})  
 
 cartSchema.pre("findOne", function() {
+    this.populate("products.product").lean()
+})
+
+cartSchema.pre("findOneAndUpdate", function() {
     this.populate("products.product").lean()
 })
 

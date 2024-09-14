@@ -25,9 +25,6 @@ export const productSchema = new mongoose.Schema(
             type: String, require: true
         },
         thumbnail: []
-    },
-    {
-        timestamps: true
     }
 )
 

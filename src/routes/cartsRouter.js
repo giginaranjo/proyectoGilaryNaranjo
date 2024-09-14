@@ -33,15 +33,15 @@ router.get("/:cid", async (req, res) => {
     }
 
     // Validación existencia de carrito por id
-    let cartExist = await CartsManager.getCartsBy(cid);
+    let cartExist = await CartsManager.getBy(cid);
     if (!cartExist) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: `Cart not found` })
     }
 
-    // Llamado al manager (mostrar producto)
+
     try {
-        let cart = await CartsManager.getCartsBy(cid)
+        let cart = await CartsManager.getBy(cid)
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json({ cart })
 
@@ -80,7 +80,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
     try {
         // Validación existencia de carrito en coll. por id
-        let cart = await CartsManager.getCartsBy(cid);
+        let cart = await CartsManager.getBy(cid);
         if (!cart) {
             res.setHeader('Content-Type', 'application/json');
             return res.status(400).json({ error: `Cart not found` })
@@ -106,7 +106,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
             cart.products[productExist].quantity++
         }
 
-        // Llamado al manager (añadir producto a carrito)
+
         let addedProduct = await CartsManager.addProduct(cid, cart)
         if (addedProduct.modifiedCount > 0) {
             res.setHeader('Content-Type', 'application/json');
@@ -121,3 +121,187 @@ router.post("/:cid/product/:pid", async (req, res) => {
     }
 })
 
+
+// MODIFICAR CARRITO
+router.put("/:cid", async (req, res) => {
+    let { cid } = req.params
+
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(cid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid id format` })
+    }
+
+    try {
+        // Validación existencia de carrito en coll. por id
+        let cart = await CartsManager.getBy(cid);
+        if (!cart) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Cart not found` })
+        }
+
+
+        let modification = req.body
+        delete modification._id
+
+
+        // Validaciones de campo y formato
+        const validFields = Object.values(modification).some(value => !Array.isArray(value) || value.length > 0)
+        if (!validFields) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: 'Complete the required fields' })
+        }
+
+
+        let modifiedCart = await CartsManager.modifyCart(cid, modification)
+
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json({ modifiedCart })
+
+    } catch (error) {
+        return catchError(res, error)
+    }
+})
+
+
+// MODIFICAR CANTIDAD DEL PRODUCTO EN CARRITO
+router.put("/:cid/products/:pid", async (req, res) => {
+    let { cid, pid } = req.params
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(cid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid cart id format` })
+    }
+    if (!isValidObjectId(pid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid product id format` })
+    }
+
+    try {
+        // Validación existencia de producto en coll. por id
+        let product = await ProductsManager.getProductsBy({ _id: pid });
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found` })
+        }
+
+        // Validación existencia de carrito en coll. por id
+        let cart = await CartsManager.getBy(cid);
+        if (!cart) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Cart not found` })
+        }
+
+        let productExist = cart.products.some(p => p.product === pid)
+        if (!productExist) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found in cart` })
+        }
+    
+        
+        let {quantity} = req.body
+        
+        // Validación formato
+        if (quantity === null || quantity === "" || quantity < 0 || isNaN(Number(quantity))) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: 'Enter a valid value' })
+        }
+
+
+        let modifiedProduct = await CartsManager.updateCart(cid,pid,Number(quantity))
+
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json({ modifiedProduct })
+
+    } catch (error) {
+        return catchError(res, error)
+    }
+})
+
+// ELIMINAR PRODUCTOS INDIVIDUALMENTE
+router.delete("/:cid/products/:pid", async (req, res) => {
+    let { cid, pid } = req.params
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(cid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid cart id format` })
+    }
+    if (!isValidObjectId(pid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid product id format` })
+    }
+
+    try {
+
+        // Validación existencia de carrito en coll. por id
+        let cart = await CartsManager.getBy(cid);
+        if (!cart) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Cart not found` })
+        }
+
+        // Validación existencia de producto en coll. por id
+        let product = await ProductsManager.getProductsBy({ _id: pid });
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found` })
+        }
+
+        let productExist = cart.products.some(p => p.product === pid)
+        if (!productExist) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found in cart` })
+        }
+        
+    
+
+        let deletedProduct = await CartsManager.deleteProductCart(cid, pid)
+        if (deletedProduct === 0) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(500).json({ error: 'An error occurred while trying to delete the product' })
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json({ payload: "The product has been removed", updateCart: {deletedProduct} })
+
+    } catch (error) {
+        return catchError(res, error)
+    }
+})
+
+// VACIAR CARRITO (ELIMINAR TODOS LOS PRODUCTOS, CONSERVAR EL CARRITO)
+router.delete("/:cid", async (req, res) => {
+    let { cid } = req.params
+
+
+    // Formato id (cadena hexadecimal de 24 caracteres)
+    if (!isValidObjectId(cid)) {
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(400).json({ error: `Invalid id format` })
+    }
+
+    try {
+        // Validación existencia de carrito en coll. por id
+        let cart = await CartsManager.getBy(cid);
+        if (!cart) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Cart not found` })
+        }
+
+
+        let emptyCart = await CartsManager.emptyCart(cid)
+        if (!emptyCart) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(500).json({ error: 'An error occurred while trying to delete the products' })
+        }
+
+        res.setHeader('Content-Type', 'application/json');
+        return res.status(200).json({payload: "The products has been removed", updateCart: {emptyCart} })
+
+    } catch (error) {
+        return catchError(res, error)
+    }
+})

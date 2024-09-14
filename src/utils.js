@@ -9,6 +9,7 @@ export const catchError = (res, error) =>{
     res.setHeader('Content-Type', 'application/json'); 
     return res.status(500).json(
         {
+            status: 'error',
             error: 'Unexpected server error. Try later.', 
             detalle: `${error.message}`
         }
