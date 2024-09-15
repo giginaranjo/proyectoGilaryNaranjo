@@ -1,0 +1,34 @@
+{{!-- Carrito de compras --}}
+
+<h1 class="titulo">Shopping cart</h1>
+
+<div class="menu">
+    <a href="/products">Home</a>
+    <a href="/realTimeProducts">Real time products</a>
+    <a href="/carts/66e51d389da85575507ed7e2">Shopping cart</a>
+</div>
+
+
+<div id="cart" class="cart">
+    {{#each cart}}
+
+    <li id="{{this._id}}" class="item-cart">
+        <h3>Product:{{this.product}}</h3>
+        <p>Price: $ {{this.product.price}}</p>
+        <p>Quantity: {{this.quantity}}</p>
+        <small>Description: {{this.product.description}}</small>
+        <small>Category: {{this.product.category}}</small>
+        <small>Stock: {{this.product.stock}}</small>
+        <button class="btnRemove" id="${item._id}">Remove from cart</button>
+    </li>
+    {{/each}}
+
+</div>
+
+<div class="menu">
+    <a href="/products"> Seguir comprando </a>
+</div>
+
+
+
+<script src="/js/cartId.js"></script>

@@ -5,12 +5,13 @@
 <div class="menu">
     <a href="/products">Home</a>
     <a href="/realTimeProducts">Real time products</a>
+    <a href="/carts/66e51d389da85575507ed7e2">Shopping cart</a>
 </div>
 
 
 <ul id="list" class="list">
     {{#each products}}
-    <li id="{{this.id}}" class="item">
+    <li id="{{this._id}}" class="item">
 
         {{!-- Thumbnail sería: <img src="{{this.thumbnail}}" alt="{{this.thumbnail}}"> si tuviera las imagenes (son
         nombres inventados) --}}
@@ -24,13 +25,16 @@
         <p>Status: {{this.status}}</p>
         <p>Stock: {{this.stock}}</p>
         <p>Category: {{this.category}}</p>
+        <button class="btn-add" id="{{this._id}}">Add to cart</button>
 
     </li>
     {{/each}}
 </ul>
 
-<div id="pagination">
 
+<div id="pagination">
+    
 </div>
+
 
 <script src="/js/index.js"></script>

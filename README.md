@@ -1,5 +1,5 @@
 
-# Segunda pre-entrega
+# Entrega final
 
 ## Authors
 
@@ -7,9 +7,9 @@
 
 ## Description
 
-Consta de un servidor que contiene los endpoints y servicios necesarios para gestionar productos y carritos de compra.
+Consta de un servidor que contiene los endpoints y servicios necesarios para gestionar productos y carritos de compra. Cuenta con MongoDB como sistema de persistencia principal.
 
-Para realizar el testeo puede utilizar las siguientes lineas de código correspondientes a los datos que se deben ingresar para crear y/o modificar un producto y para crear un carrito de compras.
+Para realizar el testeo puede utilizar las siguientes lineas de código correspondientes a los datos que se deben ingresar para crear productos y carritos respectivamente, y así empezar a interactuar con los endpoints.
 
 Crear producto
 {"title": "", "description":"", "code":"", "price": , "stock": , "category": "", "thumbnail": }
@@ -17,9 +17,6 @@ Crear producto
 Crear carrito
 {"product":[{"id":"", "quantity":}]}
 
-Actualización: 
-
-Se integraron vistas y sockets al servidor actual.
 
 
 ## Dependencies
@@ -27,3 +24,7 @@ Se integraron vistas y sockets al servidor actual.
 - express
 - express-handlebars
 - socket.io
+- mongodb
+- mongoose
+- mongoose-paginate-v2
+- mongosh

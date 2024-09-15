@@ -36,6 +36,9 @@ const server = app.listen(PORT, () => {
 
 connDB()
 
+
+//ACTUALIZACIÓN DE PRODUCTOS EN TIEMPO REAL
+
 const io = new Server(server)
 
 const updateProducts = async () => {

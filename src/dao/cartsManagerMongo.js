@@ -4,32 +4,27 @@ import { cartsModel } from "./models/cartsModel.js";
 export class CartsManagerMongo {
 
     // Obtener carritos
-
     static async getCarts() {
         return await cartsModel.find().lean()
     }
 
     // Obtener carrito por id
-
     static async getBy(id) {
         return await cartsModel.findOne({ _id: id }).lean()
     }
 
     // Crear carrito
-
     static async createCart() {
         let createdCart = await cartsModel.create({ products: [] })
         return createdCart.toJSON()
     }
 
     // Añadir productos a carrito
-
     static async addProduct(id, cart) {
         return cartsModel.updateOne({ _id: id }, cart)
     }
 
     // Modificar productos del carrito
-
     static async modifyCart(id, modification) {
         return await cartsModel.findByIdAndUpdate(id, modification, {new: true}).lean()
     }

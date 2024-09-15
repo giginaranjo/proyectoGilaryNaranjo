@@ -1,24 +1,28 @@
 import { Router } from "express";
 /* import ProductsManager from "../dao/productManager.js" */
 import { ProductsManagerMongo as ProductsManager } from "../dao/productManagerMongo.js";
+import { CartsManagerMongo as CartsManager} from "../dao/cartsManagerMongo.js";
+
 import { catchError } from "../utils.js";
 
 export const router = Router()
 
 // Obtener listado de productos
 
-router.get("/products", async (req, res) => {
-    /* let {limit, page} = req.query
-    if (!limit|| isNaN(Number(limit))) {
-        limit = 1
-    }
-    if (!page || isNaN(Number(page))) {
-        page = 1
-    } */
+router.get("/", async (req, res) => {  
     try {
-        /* let products = await ProductsManager.get(page) */
         res.setHeader('Content-Type', 'text/html');
-        res.status(200).render('index'/* , { products } */)
+        res.status(200).render('index')
+
+    } catch (error) {
+        catchError(res, error)
+    }
+})
+
+router.get("/products", async (req, res) => {  
+    try {
+        res.setHeader('Content-Type', 'text/html');
+        res.status(200).render('index')
 
     } catch (error) {
         catchError(res, error)
@@ -38,3 +42,13 @@ router.get("/realTimeProducts", async (req, res) => {
 
 })
 
+
+router.get("/carts/:cid", async (req, res) => {  
+    try {
+        res.setHeader('Content-Type', 'text/html');
+        res.status(200).render('cartId')
+
+    } catch (error) {
+        catchError(res, error)
+    }
+})

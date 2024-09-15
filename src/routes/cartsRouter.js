@@ -43,7 +43,7 @@ router.get("/:cid", async (req, res) => {
     try {
         let cart = await CartsManager.getBy(cid)
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ cart })
+        return res.status(200).json({cart})
 
     } catch (error) {
         return catchError(res, error)
@@ -250,13 +250,6 @@ router.delete("/:cid/products/:pid", async (req, res) => {
             return res.status(400).json({ error: `Product not found` })
         }
 
-        let productExist = cart.products.some(p => p.product === pid)
-        if (!productExist) {
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(400).json({ error: `Product not found in cart` })
-        }
-        
-    
 
         let deletedProduct = await CartsManager.deleteProductCart(cid, pid)
         if (deletedProduct === 0) {
