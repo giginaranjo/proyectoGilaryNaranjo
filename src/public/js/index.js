@@ -86,6 +86,18 @@ const getListProducts = async () => {
 
                     if (addProduct) {
                         console.log("product added");
+
+                        Toastify({
+                            text: "Product added to cart",
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            stopOnFocus: true,
+                            destination: "/carts/66e51d389da85575507ed7e2",
+                            style: {
+                                background: "#99ff0047"
+                            }
+                        }).showToast();
                     } else {
                         console.error("product not added");
                     }

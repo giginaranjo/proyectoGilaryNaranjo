@@ -2,7 +2,7 @@ import { Router } from "express";
 /* import CartsManager from "../dao/cartsManager.js"; */
 import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js";
 import { ProductsManagerMongo as ProductsManager } from "../dao/productManagerMongo.js";
-import { isValidObjectId } from "mongoose";
+import mongoose, { isValidObjectId } from "mongoose";
 import { catchError } from "../utils.js";
 
 
@@ -194,7 +194,9 @@ router.put("/:cid/products/:pid", async (req, res) => {
             return res.status(400).json({ error: `Cart not found` })
         }
 
-        let productExist = cart.products.some(p => p.product === pid)
+        // Validación existencia de producto en carrito por id
+        let objId=new mongoose.Types.ObjectId(pid)
+        let productExist = cart.products.some(p => p.product._id.equals(objId))
         if (!productExist) {
             res.setHeader('Content-Type', 'application/json');
             return res.status(400).json({ error: `Product not found in cart` })
@@ -250,6 +252,13 @@ router.delete("/:cid/products/:pid", async (req, res) => {
             return res.status(400).json({ error: `Product not found` })
         }
 
+        // Validación existencia de producto en carrito por id
+        let objId=new mongoose.Types.ObjectId(pid)
+        let productExist = cart.products.some(p => p.product._id.equals(objId))
+        if (!productExist) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found in cart` })
+        }
 
         let deletedProduct = await CartsManager.deleteProductCart(cid, pid)
         if (deletedProduct === 0) {
