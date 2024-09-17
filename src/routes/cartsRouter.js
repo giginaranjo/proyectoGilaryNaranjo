@@ -65,7 +65,7 @@ router.post("/", async (req, res) => {
 
 
 //AÑADIR PRODUCTO AL CARRITO
-router.post("/:cid/product/:pid", async (req, res) => {
+router.post("/:cid/products/:pid", async (req, res) => {
     let { cid, pid } = req.params
 
     // Formato id (cadena hexadecimal de 24 caracteres)
@@ -231,7 +231,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
 })
 
 // ELIMINAR PRODUCTOS INDIVIDUALMENTE
-router.delete("/:cid/product/:pid", async (req, res) => {
+router.delete("/:cid/products/:pid", async (req, res) => {
     let { cid, pid } = req.params
 
     // Formato id (cadena hexadecimal de 24 caracteres)
