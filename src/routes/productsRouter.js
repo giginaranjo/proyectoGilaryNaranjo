@@ -101,7 +101,7 @@ router.post("/", async (req, res) => {
     let newProduct = req.body
 
     // Validaciones de campo y formato
-    if (!newProduct.title.trim() || !newProduct.description.trim() || !newProduct.code.trim() || !newProduct.price || newProduct.price == " " || !newProduct.stock || newProduct.stock == " " || !newProduct.category.trim()) {
+    if (!newProduct.title.trim() || !newProduct.description.trim() || !newProduct.code || newProduct.code == " " || !newProduct.price || newProduct.price == " " || !newProduct.stock || newProduct.stock == " " || !newProduct.category.trim()) {
         res.setHeader('Content-Type', 'application/json');
         return res.status(400).json({ error: 'Complete the required fields' })
     }

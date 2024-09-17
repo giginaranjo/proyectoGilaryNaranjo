@@ -144,7 +144,15 @@ router.put("/:cid", async (req, res) => {
 
         let modification = req.body
         delete modification._id
+        let pid = modification.products[0].product
 
+        
+        // Validación existencia de producto en coll. por id
+        let product = await ProductsManager.getProductsBy({ _id: pid });
+        if (!product) {
+            res.setHeader('Content-Type', 'application/json');
+            return res.status(400).json({ error: `Product not found` })
+        }
 
         // Validaciones de campo y formato
         const validFields = Object.values(modification).some(value => !Array.isArray(value) || value.length > 0)
@@ -223,7 +231,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
 })
 
 // ELIMINAR PRODUCTOS INDIVIDUALMENTE
-router.delete("/:cid/products/:pid", async (req, res) => {
+router.delete("/:cid/product/:pid", async (req, res) => {
     let { cid, pid } = req.params
 
     // Formato id (cadena hexadecimal de 24 caracteres)

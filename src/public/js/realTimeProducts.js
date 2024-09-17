@@ -17,7 +17,7 @@ btnAdd.addEventListener("click", async (e) => {
     let thumbnailInput = document.getElementById("thumbnail").value
 
 
-    if (!title.trim() || !description.trim() || !code.trim() || !price || price == " " || !stock || stock == " " || !category.trim()) {
+    if (!title.trim() || !description.trim() || !code || code == " " || !price || price == " " || !stock || stock == " " || !category.trim()) {
         alertValidation.textContent = 'Complete the required fields'
         return
     }
