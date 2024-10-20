@@ -5,10 +5,12 @@ import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { config } from "./config/config.js";
 import { connDB } from "./connDB.js";
+import session from "express-session";
 
 import { router as productsRouter } from "./routes/productsRouter.js";
 import { router as cartsRouter } from "./routes/cartsRouter.js";
 import { router as viewsRouter } from "./routes/viewsRouter.js";
+
 // import ProductsManager from "./dao/productManager.js";
 import { ProductsManagerMongo as ProductsManager } from "./dao/productManagerMongo.js";
 
@@ -22,6 +24,11 @@ app.set("views", path.join(__dirname, "/views"))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(session({
+    secret: config.SECRET_SESSION,
+    resave: true,
+    saveUninitialized: true
+}))
 
 app.use(express.static(path.join(__dirname, "/public")))
 
