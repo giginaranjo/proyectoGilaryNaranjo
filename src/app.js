@@ -7,9 +7,11 @@ import { config } from "./config/config.js";
 import { connDB } from "./connDB.js";
 import session from "express-session";
 
-import { router as productsRouter } from "./routes/productsRouter.js";
 import { router as cartsRouter } from "./routes/cartsRouter.js";
+import { router as productsRouter } from "./routes/productsRouter.js";
+import { router as sessionsRouter } from "./routes/sessionsRouter.js";
 import { router as viewsRouter } from "./routes/viewsRouter.js";
+
 
 // import ProductsManager from "./dao/productManager.js";
 import { ProductsManagerMongo as ProductsManager } from "./dao/productManagerMongo.js";
@@ -32,8 +34,9 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, "/public")))
 
-app.use("/api/products", productsRouter)
 app.use("/api/carts", cartsRouter)
+app.use("/api/products", productsRouter)
+app.use("/api/sessions", sessionsRouter)
 app.use("/", viewsRouter)
 
 

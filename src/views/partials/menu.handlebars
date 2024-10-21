@@ -1,0 +1,18 @@
+<div class="menu"></div>
+    <a href="/products">Home</a>
+    <a href="/realTimeProducts">Real time products</a>
+    <a href="/carts/66e51d389da85575507ed7e2">Shopping cart</a>
+
+{{#if loggedIn}}
+    <a href="/profile" id="linkProfile">Profile</a>
+    <a href="/api/sessions/logout" id="linkLogout">Logout</a>
+
+{{else}}
+    <a href="/login">Login</a>
+    <a href="/register">Register</a>
+
+{{/if}}
+</div>
+
+<script src="/js/profile.js"></script>
+<script src="/js/logout.js"></script>

@@ -1,0 +1,30 @@
+{{!-- Inicio de sesión --}}
+
+<h1 class="titulo">Login</h1>
+
+{{>menu}}
+
+<div class="forms"></div>
+
+    <form id="login" class="formLogin">
+
+        <p class="pExtras">Complete the fields with the data to log in to your account:</p>
+
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email">
+
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password">
+
+        <p id="alertValidation" class="alerta"></p>
+
+        <button type="submit" id="btnLogin">Log in</button>
+
+    </form>
+
+    <p>Don't have an account yet? <a href="/register">Register</a></p>
+
+</div>
+
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script src="/js/login.js"></script>

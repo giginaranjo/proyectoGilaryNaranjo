@@ -9,6 +9,24 @@ const getListProducts = async () => {
     let sort = params.get("sort")
     let filter = params.get("filter")
 
+    let name = params.get("name")
+    let email = params.get("email")
+    let rol = params.get("rol")
+
+    if(name && email && rol){
+        Toastify({
+            text: `Welcome, ${name} \n Email: ${email} \n Rol: ${rol}`,
+            duration: 5000,
+            gravity: "top",
+            position: "right",
+            stopOnFocus: true,
+            close: true,
+            style: {
+                background: "#99ff0047"
+            }
+        }).showToast();
+    }
+
     page = parseInt(page)
     limit = parseInt(limit)
 

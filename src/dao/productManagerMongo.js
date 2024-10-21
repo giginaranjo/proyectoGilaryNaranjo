@@ -8,10 +8,6 @@ export class ProductsManagerMongo {
         return await productsModel.find().lean()
     }
 
-    /* static async getPaginate(page = 1, limit=5) {
-        return await productsModel.paginate({}, {lean:true, page, limit})
-    } */
-
     static async getProducts(filter= {}, page, limit, sort={}) {
        return await productsModel.paginate(filter, {lean:true, page, limit, sort})
     }
@@ -19,7 +15,7 @@ export class ProductsManagerMongo {
     // Obtener productos por id
 
     static async getProductsBy(filter={}) {
-        return await productsModel.findOne(filter)
+        return await productsModel.findOne(filter).lean()
     }
 
     // Añadir productos
