@@ -1,9 +1,9 @@
 <div class="menu"></div>
     <a href="/products">Home</a>
     <a href="/realTimeProducts">Real time products</a>
-    <a href="/carts/66e51d389da85575507ed7e2">Shopping cart</a>
 
-{{#if loggedIn}}
+{{#if user}}
+    <a href="/carts/{{user.cart._id}}">Shopping cart</a>
     <a href="/profile" id="linkProfile">Profile</a>
     <a href="/api/sessions/logout" id="linkLogout">Logout</a>
 

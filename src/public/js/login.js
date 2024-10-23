@@ -20,11 +20,12 @@ if (message) {
 
 btnLogin.addEventListener("click", async (e) => {
     e.preventDefault()
+console.log("hola");
 
-    let email = document.getElementById("email").value
+    let email = document.getElementById("email").value.toLowerCase()
     let password = document.getElementById("password").value
 
-    if (!email.trim() || !password.trim()) {
+    if (!email.trim() || !password || password == " ") {
         alertValidation.textContent = 'Complete the required fields'
         return
     }

@@ -2,9 +2,8 @@
 
 <h1 class="titulo">Profile</h1>
 
-{{>menu}}
+{{> menu user=user}}
 
-<h2>Welcome, {{user.name}}</h2>
+<h2>Welcome, {{user.first_name}}</h2>
 
 <p>Email: {{user.email}}</p>
-

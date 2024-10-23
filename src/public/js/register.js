@@ -6,11 +6,13 @@ let alertValidation = document.getElementById("alertValidation")
 btnRegister.addEventListener("click", async (e) => {
     e.preventDefault()
 
-    let name = document.getElementById("name").value
-    let email = document.getElementById("email").value
+    let first_name = document.getElementById("name").value.toLowerCase()
+    let last_name = document.getElementById("last-name").value.toLowerCase()
+    let age = document.getElementById("age").value
+    let email = document.getElementById("email").value.toLowerCase()
     let password = document.getElementById("password").value
 
-    if (!name.trim() || !email.trim() || !password.trim()) {
+    if (!first_name.trim() || !last_name.trim() || !age || age == " " || !email.trim() || !password || password == " ") {
         alertValidation.textContent = 'Complete the required fields'
         return
     }
@@ -22,7 +24,7 @@ btnRegister.addEventListener("click", async (e) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify({ name, email, password })
+                body: JSON.stringify({ first_name, last_name, age, email, password })
             })
 
         let data = await response.json()

@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
     try {
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('index', {
-            loggedIn: req.session.user
+            user: req.session.user
         })
 
     } catch (error) {
@@ -25,7 +25,7 @@ router.get("/products", async (req, res) => {
     try {
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('index', {
-            loggedIn: req.session.user
+            user: req.session.user
         })
 
     } catch (error) {
@@ -41,7 +41,7 @@ router.get("/realTimeProducts", async (req, res) => {
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('realTimeProducts', { 
             products,
-            loggedIn: req.session.user
+            user: req.session.user
         })
     } catch (error) {
         catchError(res, error)
@@ -54,7 +54,7 @@ router.get("/carts/:cid", async (req, res) => {
     try {
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('cartId', {
-            loggedIn: req.session.user
+            user: req.session.user
         })
 
     } catch (error) {
@@ -67,7 +67,7 @@ router.get("/register", async (req, res) => {
     try {
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('register', {
-            loggedIn: req.session.user
+            user: req.session.user
         })
 
     } catch (error) {
@@ -80,7 +80,7 @@ router.get("/login", async (req, res) => {
     try {
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('login', {
-            loggedIn: req.session.user
+            user: req.session.user
         })
 
     } catch (error) {
@@ -91,12 +91,16 @@ router.get("/login", async (req, res) => {
 
 router.get("/profile", auth, async (req, res) => {  
     try {
-        let user = req.session.user
+
+        let user
+        const isApiRequest = req.headers['accept']?.includes('application/json')
+        if (isApiRequest) {
+            return res.status(200).json({ user: req.session.user });
+        }
 
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('profile', {
-            user,
-            loggedIn: req.session.user
+            user: req.session.user
         })
 
     } catch (error) {

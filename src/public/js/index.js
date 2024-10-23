@@ -13,7 +13,7 @@ const getListProducts = async () => {
     let email = params.get("email")
     let rol = params.get("rol")
 
-    if(name && email && rol){
+    if (name && email && rol) {
         Toastify({
             text: `Welcome, ${name} \n Email: ${email} \n Rol: ${rol}`,
             duration: 5000,
@@ -45,6 +45,7 @@ const getListProducts = async () => {
     }
 
     try {
+
         let response = await fetch(`/api/products?${searchParams.toString()}`)
         let data = await response.json()
         let productsCollection = data
@@ -52,17 +53,16 @@ const getListProducts = async () => {
 
         let productList = document.getElementById("list")
         productList.innerHTML = ""
-       
-    console.log(productsCollection);
-    
+
+
         // IMPRIMIR PRODUCTOS EN PANTALLA 
         productsCollection.payload.products.forEach(p => {
             const li = document.createElement("li")
             li.id = p._id
             li.classList.add("item")
-    
+
             //Thumbnail sería: <img src="${p.thumbnail}" alt="${p.thumbnail}"> si tuviera las imagenes (son nombres inventados)
-    
+
             li.innerHTML = `
             
             <p>${p.thumbnail}</p>
@@ -76,22 +76,36 @@ const getListProducts = async () => {
             <p>Category: ${p.category}</p>
             <button class="btnAdd" id="${p._id}">Add to cart</button>
             `
-    
+
             productList.appendChild(li)
         })
-    
 
+        // OBTENER CART ID
+
+        let user = await fetch("/profile",
+            {
+                method: "GET",
+                headers: {
+                    'accept': 'application/json'
+                }
+            })
+
+        let info = await user.json();
+        let cartId = info.user.cart._id
+        
+        // AÑADIR PRODUCTOS
 
         Array.from(document.getElementsByClassName("btnAdd")).forEach(button => {
             button.addEventListener("click", async (e) => {
+
                 let pid = e.target.id
-                let cid = "66e51d389da85575507ed7e2"
+                let cid = cartId
                 pid = pid.toString()
                 cid = cid.toString()
 
-
                 try {
-                    const response = await fetch(`/api/carts/${cid}/product/${pid}`,
+
+                    const response = await fetch(`/api/carts/${cid}/products/${pid}`,
                         {
                             method: "POST",
                             headers: {
@@ -100,7 +114,6 @@ const getListProducts = async () => {
                         })
 
                     const addProduct = await response.json()
-
 
                     if (addProduct) {
                         console.log("product added");
@@ -111,18 +124,19 @@ const getListProducts = async () => {
                             gravity: "top",
                             position: "right",
                             stopOnFocus: true,
-                            destination: "/carts/66e51d389da85575507ed7e2",
+                            destination: `/carts/${cartId}`,
                             style: {
                                 background: "#99ff0047"
                             }
                         }).showToast();
+
                     } else {
                         console.error("product not added");
                     }
 
                 } catch (error) {
                     console.error("Error adding product");
-                    
+
                 }
             })
         })
@@ -181,9 +195,10 @@ const getListProducts = async () => {
             lastPage.classList.remove("disabled")
         }
         pagination.append(lastPage)
-    }catch{
-    console.log("Error products: Unexpected server error. Try later.")
-}}
+    } catch {
+        console.log("Error products: Unexpected server error. Try later.")
+    }
+}
 
 
 getListProducts()

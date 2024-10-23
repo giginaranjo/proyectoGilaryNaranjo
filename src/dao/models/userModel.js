@@ -1,22 +1,37 @@
 import mongoose from "mongoose";
 
-export const usersModel = mongoose.model(
-    "users", new mongoose.Schema(
-        {
-            name: {
-                type: String, require: true
-            },
-            email: {
-                type: String, unique: true, require: true
-            },
-            password: {
-                type: String, require: true
-            },
-            rol: {
-                type: String, default: "User"
-            }
+export const userSchema = new mongoose.Schema(
+    {
+        first_name: {
+            type: String, require: true
         },
-        {
-            strict: false
+        last_name: String,
+        email: {
+            type: String, unique: true, require: true
+        },
+        age: Number,
+        password: {
+            type: String, require: true
+        },
+        cart: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "carts"
+        },
+        role: {
+            type: String, default: "User"
         }
-    ))
+    },
+    {
+        strict: false
+    }
+)
+
+
+userSchema.pre("findOne", function () {
+    this.populate("cart").lean()
+})
+
+
+export const usersModel = mongoose.model(
+    "users", userSchema
+)

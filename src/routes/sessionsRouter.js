@@ -7,7 +7,7 @@ export const router = Router()
 
 router.get("/error", (req, res) => {
     res.setHeader('Content-Type', 'application/json');
-    return res.status(401).json({ error: `Unexpected server error. Try later.` })
+    return res.status(401).json({ error: `Authentication error` })
 })
 
 // INGRESO LOCAL 

@@ -1,14 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@300&display=swap");
 
 * {
-  font-family: "Open Sans", sans-serif;
-  margin: 0px;
-  padding: 0px;
-  box-sizing: border-box;
-  
+    font-family: "Open Sans", sans-serif;
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+
 }
 
-body{
+body {
     background-color: #161515e6;
     color: white;
 }
@@ -31,17 +31,18 @@ body{
     margin: 10px;
 }
 
-a{
+a {
     color: white;
     text-decoration: none;
     font-size: 18px;
+    cursor: pointer;
 }
 
-a:hover{
-color: #99ff00;
+a:hover {
+    color: #99ff00;
 }
 
-.list{
+.list {
     display: flex;
     justify-content: space-evenly;
     align-items: center;
@@ -51,7 +52,7 @@ color: #99ff00;
     flex-wrap: wrap;
 }
 
-.item{
+.item {
     display: flex;
     flex-direction: column;
     gap: 3px;
@@ -59,22 +60,22 @@ color: #99ff00;
     padding: 5px;
 }
 
-h3{
+h3 {
     padding: 8px 0px;
 }
 
-h4{
+h4 {
     padding: 8px 0px;
     color: #99ff00;
 }
 
-.forms{
+.forms {
     display: flex;
     justify-content: space-evenly;
     gap: 10px;
 }
 
-form{
+form {
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -83,56 +84,57 @@ form{
     width: 400px;
 }
 
-form:hover{
+form:hover {
     background-color: #99ff0047;
 }
 
-h2{
+h2 {
     margin-bottom: 10px;
 }
 
-.pExtras{
+.pExtras {
     padding: 10px 0px;
 }
 
-.iExtras{
+.iExtras {
     padding-top: 10px;
 }
 
-input{
-    background-color: rgba(22, 21, 21, 0.902) ;
+input {
+    background-color: rgba(22, 21, 21, 0.902);
     border: rgba(22, 21, 21, 0.902) 1px solid;
     color: white;
     padding: 3px;
-    margin-bottom:5px;
+    margin-bottom: 5px;
     border-radius: 5px;
 }
 
-button{
-    background-color: rgba(22, 21, 21, 0.902) ;
+button {
+    cursor: pointer;
+    background-color: rgba(22, 21, 21, 0.902);
     border: rgba(22, 21, 21, 0.902) 1px solid;
     color: #99ff00;
     font-weight: 600;
     padding: 5px;
     border-radius: 5px;
-    margin-top: 7px; 
+    margin-top: 7px;
 }
 
-.alerta{
+.alerta {
     margin-top: 30px;
     color: #c66bff;
     font-weight: 600;
 }
 
-.status{
-    margin-bottom:5px;
+.status {
+    margin-bottom: 5px;
 }
 
-span{
+span {
     font-weight: 600;
 }
 
-.titleList{
+.titleList {
     display: flex;
     justify-content: center;
     margin-bottom: 20px;
@@ -140,30 +142,30 @@ span{
     padding: 10px;
 }
 
-.disabled{
+.disabled {
     pointer-events: none;
     color: #c66bff61;
 }
 
 
-.cart{
+.cart {
     display: flex;
     flex-direction: row;
     margin: 10px;
     padding: 30px;
     gap: 30px;
-    
+
 }
 
-.item-cart{
+.item-cart {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     gap: 10px;
-   
+
 }
 
-#pagination{
+#pagination {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -171,7 +173,7 @@ span{
     gap: 10px;
 }
 
-.color-cart{
+.color-cart {
     padding: 8px 0px;
     color: #99ff00;
 }

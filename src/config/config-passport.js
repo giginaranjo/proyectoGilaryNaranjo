@@ -2,8 +2,9 @@ import passport from "passport"
 import local from "passport-local"
 import github from "passport-github2"
 import { UserManagerMongo as UserManager } from "../dao/userManagerMongo.js"
+import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js"
 import { createHash, validateHash } from "../utils.js"
-import {config} from "./config.js"
+import { config } from "./config.js"
 
 export const initPassport = () => {
 
@@ -15,8 +16,9 @@ export const initPassport = () => {
             },
             async (req, username, password, done) => {
                 try {
-                    let { name } = req.body
-                    if (!name) {
+                    let { first_name, last_name, age } = req.body
+
+                    if (!first_name || !last_name || !age) {
                         return done(null, false)
                     }
 
@@ -26,7 +28,18 @@ export const initPassport = () => {
                     }
 
                     password = createHash(password)
-                    let newUser = await UserManager.createUser({ name, email: username, password })
+
+                    let newCart = await CartsManager.createCart()
+
+                    let newUser = await UserManager.createUser({
+                        first_name,
+                        last_name,
+                        age,
+                        email: username,
+                        password,
+                        cart: newCart._id
+                    })
+
                     return done(null, newUser)
 
                 } catch (error) {
@@ -52,6 +65,7 @@ export const initPassport = () => {
                         return done(null, false)
                     }
 
+                    delete user.password
                     return done(null, user)
 
                 } catch (error) {
@@ -78,7 +92,7 @@ export const initPassport = () => {
 
                     let user = await UserManager.getBy({ email })
                     if (!user) {
-                        user = await UserManager.createUser({ name, email, profileGithub: profile })
+                        user = await UserManager.createUser({ first_name: name, email, profileGithub: profile })
                     }
 
                     return done(null, user)
@@ -95,8 +109,8 @@ export const initPassport = () => {
         return done(null, user._id)
     })
 
-    passport.deserializeUser( async (id, done) => {
-        let user = await UserManager.getBy({_id:id})
+    passport.deserializeUser(async (id, done) => {
+        let user = await UserManager.getBy({ _id: id })
         return done(null, user)
     })
 }

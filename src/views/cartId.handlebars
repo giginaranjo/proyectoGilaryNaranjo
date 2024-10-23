@@ -2,7 +2,7 @@
 
 <h1 class="titulo">Shopping cart</h1>
 
-{{>menu}}
+{{> menu user=user}}
 
 <div id="cart" class="cart">
     {{#each cart}}
@@ -25,5 +25,5 @@
 </div>
 
 
-
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script src="/js/cartId.js"></script>

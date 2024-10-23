@@ -1,6 +1,19 @@
 const getProductsCart = async () => {
     try {
-        let response = await fetch("/api/carts/66e51d389da85575507ed7e2")
+
+        let user = await fetch("/profile",
+            {
+                method: "GET",
+                headers: {
+                    'accept': 'application/json'
+                }
+            })
+
+        let info = await user.json();
+        let cartId = info.user.cart._id
+
+
+        let response = await fetch(`/api/carts/${cartId}`)
         let data = await response.json()
         let carts = data.cart.products
 
@@ -28,7 +41,7 @@ const getProductsCart = async () => {
         Array.from(document.getElementsByClassName("btnRemove")).forEach(button => {
             button.addEventListener("click", async (e) => {
                 let pid = e.target.id
-                let cid = "66e51d389da85575507ed7e2"
+                let cid = cartId
                 pid = pid.toString()
                 cid = cid.toString()
 
@@ -45,6 +58,18 @@ const getProductsCart = async () => {
                     if (removeProduct) {
                         console.log("product removed");
                         getProductsCart();
+
+                        Toastify({
+                            text: `Producto eliminado`,
+                            duration: 3000,
+                            gravity: "top",
+                            position: "right",
+                            close: true,
+                            style: {
+                                background: "#99ff0047"
+                            }
+                        }).showToast();
+
                     } else {
                         console.error("product not removed");
                     }
@@ -58,9 +83,5 @@ const getProductsCart = async () => {
         console.log("Error cart: Unexpected server error. Try later.", error)
     }
 }
-
-
-
-
 
 getProductsCart()

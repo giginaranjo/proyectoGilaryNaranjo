@@ -2,7 +2,7 @@
 
 <h1 class="titulo">Register</h1>
 
-{{>menu}}
+{{> menu user=user}}
 
 <div class="forms">
 
@@ -10,8 +10,14 @@
 
         <p class="pExtras">Complete the fields with the data to create an account:</p>
 
-        <label for="name">Name:</label>
+        <label for="name">First name:</label>
         <input type="text" name="name" id="name">
+
+        <label for="last-name">Last name:</label>
+        <input type="text" name="last-name" id="last-name">
+
+        <label for="age">Age:</label>
+        <input type="number" name="age" id="age">
 
         <label for="email">Email:</label>
         <input type="email" name="email" id="email">
