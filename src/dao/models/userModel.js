@@ -15,5 +15,8 @@ export const usersModel = mongoose.model(
             rol: {
                 type: String, default: "User"
             }
+        },
+        {
+            strict: false
         }
     ))

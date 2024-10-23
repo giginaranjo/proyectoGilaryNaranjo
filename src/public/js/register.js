@@ -15,8 +15,6 @@ btnRegister.addEventListener("click", async (e) => {
         return
     }
 
-    let newUser = { name, email, password }
-
     try {
         let response = await fetch("/api/sessions/register",
             {
@@ -24,7 +22,7 @@ btnRegister.addEventListener("click", async (e) => {
                 headers: {
                     "Content-Type": "application/json"
                 },
-                body: JSON.stringify(newUser)
+                body: JSON.stringify({ name, email, password })
             })
 
         let data = await response.json()
@@ -38,7 +36,7 @@ btnRegister.addEventListener("click", async (e) => {
 
 
         } else {
-            window.location.href = `/login?mensaje= Account created to ${data.createdUser.email}`
+            window.location.href = `/login?message= Account created to ${data.newUser.email}`
         }
 
 

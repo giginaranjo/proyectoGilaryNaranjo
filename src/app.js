@@ -1,11 +1,14 @@
-import { __dirname} from "./utils.js";
+import { __dirname } from "./utils.js";
 import path from "path";
 import express from "express";
+import session from "express-session";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
 import { config } from "./config/config.js";
 import { connDB } from "./connDB.js";
-import session from "express-session";
+import MongoStore from "connect-mongo";
+import { initPassport } from "./config/config-passport.js";
+import passport from "passport";
 
 import { router as cartsRouter } from "./routes/cartsRouter.js";
 import { router as productsRouter } from "./routes/productsRouter.js";
@@ -26,13 +29,25 @@ app.set("views", path.join(__dirname, "/views"))
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname, "/public")))
+
 app.use(session({
     secret: config.SECRET_SESSION,
     resave: true,
-    saveUninitialized: true
+    saveUninitialized: true,
+    store: MongoStore.create(
+        {
+            mongoUrl: config.URL_MONGO,
+            dbName: config.DB_NAME,
+            ttl: 3600
+        }
+    )
 }))
 
-app.use(express.static(path.join(__dirname, "/public")))
+initPassport()
+app.use(passport.initialize())
+app.use(passport.session())
+
 
 app.use("/api/carts", cartsRouter)
 app.use("/api/products", productsRouter)

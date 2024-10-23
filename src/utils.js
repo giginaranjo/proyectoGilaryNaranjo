@@ -1,5 +1,6 @@
 import {fileURLToPath} from 'url';
 import { dirname } from 'path';
+import bcrypt from "bcrypt"
 
 // PATH
 const __filename = fileURLToPath(import.meta.url);
@@ -16,3 +17,7 @@ export const catchError = (res, error) =>{
         }
     )
 }
+
+// HASHEO
+export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10))
+export const validateHash = (password, hash) => bcrypt.compareSync(password, hash)

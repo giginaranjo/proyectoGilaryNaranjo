@@ -1,85 +1,60 @@
 import { Router } from "express";
-import crypto from "crypto"
-import { UserManagerMongo as UserManager } from "../dao/userManagerMongo.js";
-import { config } from "../config/config.js";
-import { catchError } from "../utils.js";
+import { auth } from "../middleware/auth.js";
+import passport from "passport";
 
 export const router = Router()
 
-router.post("/register", async (req, res) => {
-    let newUser = req.body
-    newUser.password= String(newUser.password)
+
+router.get("/error", (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(401).json({ error: `Unexpected server error. Try later.` })
+})
+
+// INGRESO LOCAL 
+
+router.post("/register", passport.authenticate("register", { failureRedirect: "/api/sessions/error" }), (req, res) => {
     
-    // Validaciones de campo y formato
-
-    if (!newUser.name.trim() || !newUser.email.trim() || !newUser.password.trim()) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'Complete the required fields' })
-    }
-
-    try {
-
-        let exist = await UserManager.getBy({ email: newUser.email })
-        if (exist) {
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(400).json({ error: `This email (${newUser.email}) is already being used with another account` })
-        }
-
-        newUser.password = crypto.createHmac("sha256", config.SECRET).update(newUser.password).digest("hex")
-
-        let createdUser = await UserManager.createUser(newUser)
-
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(201).json({ createdUser })
-
-
-    } catch (error) {
-        catchError(res, error)
-    }
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(201).json({ message: "Account created to", newUser: req.user })
+    
 })
 
 
-router.post("/login", async (req, res) => {
-    let { email, password } = req.body
-
-    password= String(password)
-
-    // Validaciones de campo y formato
-
-    if (!email.trim() || !password.trim()) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: 'Complete the required fields' })
-    }
-
-    try {
-        password = crypto.createHmac("sha256", config.SECRET).update(password).digest("hex")
-        let user = await UserManager.getBy({ email, password })
-        if (!user) {
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(401).json({ error: `Invalid credentials` })
-        }
-
-        delete user.password
-
-        req.session.user = user
-
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ message: "logged in", user: user })
-
-    } catch (error) {
-        catchError(res, error)
-    }
+router.post("/login", passport.authenticate("login", { failureRedirect: "/api/sessions/error" }), (req, res) => {
+    
+    req.session.user = req.user
+    
+    res.setHeader('Content-Type', 'application/json');
+    return res.status(200).json({ message: "You logged in successfully", user: req.user })
+    
 })
 
+// INGRESO GITHUB
 
-router.get("/logout", async (req, res) => {
+router.get("/github", passport.authenticate("github", {}))
 
-    let user = req.session.user
-
-    if (!user) {
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(400).json({ error: `Not logged in.` })
+router.get("/callbackgithub", passport.authenticate("github", { failureRedirect: "/api/sessions/error" }), (req, res) => {
+    
+    if (!req.session) {
+        return console.log("auxilio");
     }
+    req.session.user = req.user
+    
+    const isApiRequest = req.headers['accept']?.includes('application/json')
+
+        if (isApiRequest) {
+            return res.status(200).json({ message: "You logged in successfully", user: req.user });
+        } else {
+            return res.redirect(`/products?name=${req.user.name}&email=${req.user.email}&rol=${req.user.rol}`);
+        }
+    
+})
+
+// LOGOUT
+
+router.get("/logout", auth, async (req, res) => {
+
+    req.session.user = req.user
 
     req.session.destroy(e => {
         if (e) {
@@ -87,8 +62,14 @@ router.get("/logout", async (req, res) => {
             return res.status(500).json({ error: `Unexpected server error.` })
         }
 
-        res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ message: `Logout successful.` })
-    })
+        const isApiRequest = req.headers['accept']?.includes('application/json')
+
+        if (isApiRequest) {
+            return res.status(200).json({ message: 'Logout successful.' });
+        } else {
+            return res.redirect(`/login?message=Logout successful.`);
+        }
+
+    })  
 
 })
