@@ -1,10 +1,27 @@
 import passport from "passport"
 import local from "passport-local"
 import github from "passport-github2"
+import passportJwt from "passport-jwt"
 import { UserManagerMongo as UserManager } from "../dao/userManagerMongo.js"
 import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js"
 import { createHash, validateHash } from "../utils.js"
 import { config } from "./config.js"
+
+const searchToken = req => {
+
+    let token = null
+    if (req.cookies.tokenCookie) {
+        token = req.cookies.tokenCookie
+    }
+
+    return token
+}
+
+const validEmail = email => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email)
+}
+
 
 export const initPassport = () => {
 
@@ -18,13 +35,19 @@ export const initPassport = () => {
                 try {
                     let { first_name, last_name, age } = req.body
 
-                    if (!first_name || !last_name || !age) {
-                        return done(null, false)
+                    age = Number(age)
+
+                    if (!first_name || !last_name || !age || age == " " || password == " ") {
+                        return done(null, false, { message: 'Complete the required fields' })
+                    }
+
+                    if (!validEmail(username)) {
+                        return done(null, false, { message: 'Wrong email format' })
                     }
 
                     let exist = await UserManager.getBy({ email: username })
                     if (exist) {
-                        return done(null, false)
+                        return done(null, false, { message: `This email ${username} is already being used with another account. Please check your email and try again or log in.` })
                     }
 
                     password = createHash(password)
@@ -56,17 +79,33 @@ export const initPassport = () => {
             },
             async (username, password, done) => {
                 try {
-                    let user = await UserManager.getBy({ email: username })
-                    if (!user) {
-                        return done(null, false)
+
+                    if (!validEmail(username)) {
+                        return done(null, false, { message: 'Wrong email format' })
                     }
 
-                    if (!validateHash(password, user.password)) {
-                        return done(null, false)
-                    }
+                    let user
 
-                    delete user.password
-                    return done(null, user)
+                    if (username == config.USER_NAME_ADMIN && password == config.PASSWORD_ADMIN) {
+                        user = { first_name: "Admin", email: username, role: "Admin" }
+
+                        return done(null, user)
+
+                    } else {
+
+                        user = await UserManager.getBy({ email: username })
+                        if (!user) {
+                            return done(null, false, { message: `Invalid credentials. Please check the data and try again.` })
+                        }
+
+                        if (!validateHash(password, user.password)) {
+                            return done(null, false, { message: `Invalid credentials. Please check the data and try again.` })
+                        }
+
+
+                        delete user.password
+                        return done(null, user)
+                    }
 
                 } catch (error) {
                     return done(error)
@@ -87,7 +126,7 @@ export const initPassport = () => {
 
                     let { name, email } = profile._json
                     if (!name || !email) {
-                        return done(null, false)
+                        return done(null, false, { message: `Your account does not have the required information. Update your GitHub account information and try again.` })
                     }
 
                     let user = await UserManager.getBy({ email })
@@ -104,13 +143,19 @@ export const initPassport = () => {
         )
     )
 
-
-    passport.serializeUser((user, done) => {
-        return done(null, user._id)
-    })
-
-    passport.deserializeUser(async (id, done) => {
-        let user = await UserManager.getBy({ _id: id })
-        return done(null, user)
-    })
+    passport.use("current",
+        new passportJwt.Strategy(
+            {
+                secretOrKey: config.SECRET,
+                jwtFromRequest: new passportJwt.ExtractJwt.fromExtractors([searchToken])
+            },
+            async (user, done) => {
+                try {
+                    return done(null, user)
+                } catch (error) {
+                    return done(error)
+                }
+            }
+        )
+    )
 }

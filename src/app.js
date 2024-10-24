@@ -1,20 +1,20 @@
 import { __dirname } from "./utils.js";
 import path from "path";
 import express from "express";
-import session from "express-session";
 import { Server } from "socket.io";
 import { engine } from "express-handlebars";
-import { config } from "./config/config.js";
 import { connDB } from "./connDB.js";
-import MongoStore from "connect-mongo";
-import { initPassport } from "./config/config-passport.js";
+import { config } from "./config/config.js";
+
 import passport from "passport";
+import { initPassport } from "./config/config-passport.js";
+import cookieParser from "cookie-parser"
+import {infoUser} from "./utils.js"
 
 import { router as cartsRouter } from "./routes/cartsRouter.js";
 import { router as productsRouter } from "./routes/productsRouter.js";
 import { router as sessionsRouter } from "./routes/sessionsRouter.js";
 import { router as viewsRouter } from "./routes/viewsRouter.js";
-
 
 // import ProductsManager from "./dao/productManager.js";
 import { ProductsManagerMongo as ProductsManager } from "./dao/productManagerMongo.js";
@@ -31,23 +31,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "/public")))
 
-app.use(session({
-    secret: config.SECRET_SESSION,
-    resave: true,
-    saveUninitialized: true,
-    store: MongoStore.create(
-        {
-            mongoUrl: config.URL_MONGO,
-            dbName: config.DB_NAME,
-            ttl: 3600
-        }
-    )
-}))
+app.use(cookieParser())
 
 initPassport()
 app.use(passport.initialize())
-app.use(passport.session())
-
+app.use(infoUser)
 
 app.use("/api/carts", cartsRouter)
 app.use("/api/products", productsRouter)

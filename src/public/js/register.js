@@ -3,6 +3,11 @@
 const btnRegister = document.getElementById("btnRegister")
 let alertValidation = document.getElementById("alertValidation")
 
+const validEmail = email => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email)
+}
+
 btnRegister.addEventListener("click", async (e) => {
     e.preventDefault()
 
@@ -17,17 +22,25 @@ btnRegister.addEventListener("click", async (e) => {
         return
     }
 
+    if (!validEmail(email)) {
+        alertValidation.textContent = 'Wrong email format'
+        return
+    }
+
     try {
         let response = await fetch("/api/sessions/register",
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'accept': 'application/json'
                 },
                 body: JSON.stringify({ first_name, last_name, age, email, password })
             })
 
         let data = await response.json()
+        console.log(data);
+
         if (response.status >= 400) {
             alertValidation.textContent = data.error;
             console.error("account not created");
@@ -43,7 +56,7 @@ btnRegister.addEventListener("click", async (e) => {
 
 
     } catch (error) {
-        console.error("Error creating account");
+        console.error(error.message);
     }
 
 

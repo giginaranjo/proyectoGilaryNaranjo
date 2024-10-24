@@ -1,6 +1,7 @@
 import { Router } from "express";
-import { auth } from "../middleware/auth.js";
-import passport from "passport";
+import jwt from "jsonwebtoken"
+import { authenticate, infoUser } from "../utils.js";
+import { config } from "../config/config.js"
 
 export const router = Router()
 
@@ -12,64 +13,67 @@ router.get("/error", (req, res) => {
 
 // INGRESO LOCAL 
 
-router.post("/register", passport.authenticate("register", { failureRedirect: "/api/sessions/error" }), (req, res) => {
-    
+router.post("/register", authenticate("register"), (req, res) => {
+
     res.setHeader('Content-Type', 'application/json');
     return res.status(201).json({ message: "Account created to", newUser: req.user })
-    
+
 })
 
 
-router.post("/login", passport.authenticate("login", { failureRedirect: "/api/sessions/error" }), (req, res) => {
-    
-    req.session.user = req.user
-    
+router.post("/login", authenticate("login"), (req, res) => {
+
+    let token = jwt.sign(req.user, config.SECRET, { expiresIn: 3600 })
+    res.cookie("tokenCookie", token, {httpOnly: true})
+
     res.setHeader('Content-Type', 'application/json');
     return res.status(200).json({ message: "You logged in successfully", user: req.user })
-    
+
 })
 
 // INGRESO GITHUB
 
-router.get("/github", passport.authenticate("github", {}))
+router.get("/github", authenticate("github"))
 
-router.get("/callbackgithub", passport.authenticate("github", { failureRedirect: "/api/sessions/error" }), (req, res) => {
+router.get("/callbackgithub", authenticate("github"), (req, res) => {
     
-    if (!req.session) {
-        return console.log("auxilio");
-    }
-    req.session.user = req.user
-    
+    let token = jwt.sign(req.user, config.SECRET, { expiresIn: 3600 })
+    res.cookie("tokenCookie", token, {httpOnly: true})
+
+
     const isApiRequest = req.headers['accept']?.includes('application/json')
 
         if (isApiRequest) {
             return res.status(200).json({ message: "You logged in successfully", user: req.user });
         } else {
-            return res.redirect(`/products?name=${req.user.name}&email=${req.user.email}&rol=${req.user.rol}`);
+            return res.redirect(`/products?name=${req.user.first_name}&email=${req.user.email}&rol=${req.user.role}`);
         }
     
 })
 
+
 // LOGOUT
 
-router.get("/logout", auth, async (req, res) => {
+router.get("/logout", authenticate("current"), async (req, res) => {
 
-    req.session.user = req.user
-
-    req.session.destroy(e => {
-        if (e) {
-            res.setHeader('Content-Type', 'application/json');
-            return res.status(500).json({ error: `Unexpected server error.` })
-        }
+    try {
+        res.clearCookie("tokenCookie")
 
         const isApiRequest = req.headers['accept']?.includes('application/json')
-
         if (isApiRequest) {
-            return res.status(200).json({ message: 'Logout successful.' });
+            return res.status(200).json({ message: 'Logout successful.' })
         } else {
-            return res.redirect(`/login?message=Logout successful.`);
+            return res.redirect(`/login?message=Logout successful.`)
         }
 
-    })  
+    } catch (error) {
+        es.setHeader('Content-Type', 'application/json');
+        return res.status(500).json({ error: `Unexpected server error.` })
+    }
+})
 
+router.get("/current", authenticate("current"), async (req, res) => {
+
+   res.setHeader('Content-Type', 'application/json'); 
+   return res.status(200).json({ message: "User logged", user: req.user })
 })

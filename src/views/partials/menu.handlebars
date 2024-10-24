@@ -1,15 +1,15 @@
 <div class="menu"></div>
-    <a href="/products">Home</a>
-    <a href="/realTimeProducts">Real time products</a>
+<a href="/products">Home</a>
+<a href="/realTimeProducts">Real time products</a>
 
-{{#if user}}
-    <a href="/carts/{{user.cart._id}}">Shopping cart</a>
-    <a href="/profile" id="linkProfile">Profile</a>
-    <a href="/api/sessions/logout" id="linkLogout">Logout</a>
+{{#if inLogged}}
+<a href="/carts/{{user.cart._id}}">Shopping cart</a>
+<a href="/profile" id="linkProfile">Profile</a>
+<a href="/api/sessions/logout" id="linkLogout">Logout</a>
 
 {{else}}
-    <a href="/login">Login</a>
-    <a href="/register">Register</a>
+<a href="/login">Login</a>
+<a href="/register">Register</a>
 
 {{/if}}
 </div>

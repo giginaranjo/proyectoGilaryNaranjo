@@ -1,16 +1,18 @@
 const getProductsCart = async () => {
     try {
 
-        let user = await fetch("/profile",
+        let user = await fetch("/api/sessions/current",
             {
                 method: "GET",
                 headers: {
+                    "Content-Type": "application/json",
                     'accept': 'application/json'
                 }
             })
 
         let info = await user.json();
         let cartId = info.user.cart._id
+console.log(cartId);
 
 
         let response = await fetch(`/api/carts/${cartId}`)

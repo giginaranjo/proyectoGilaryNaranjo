@@ -8,5 +8,7 @@ export const config = {
     SECRET_SESSION: "NaranjoBackend",
     GITHUB_CLIENT_ID: "Iv23lig33Rnkbjx0vgqx",
     GITHUB_CLIENT_SECRET: "ea4a766d30bb96e78d81537a4061afa11f193ee8",
-    GITHUB_CALLBACK_URL: "http://localhost:8080/api/sessions/callbackgithub"
+    GITHUB_CALLBACK_URL: "http://localhost:8080/api/sessions/callbackgithub",
+    USER_NAME_ADMIN: "admincoder@coder.com",
+    PASSWORD_ADMIN: "adminCod3r123"
 }

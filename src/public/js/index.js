@@ -11,11 +11,11 @@ const getListProducts = async () => {
 
     let name = params.get("name")
     let email = params.get("email")
-    let rol = params.get("rol")
+    let role = params.get("role")
 
-    if (name && email && rol) {
+    if (name && email && role) {
         Toastify({
-            text: `Welcome, ${name} \n Email: ${email} \n Rol: ${rol}`,
+            text: `Welcome, ${name} \n Email: ${email} \n Role: ${role}`,
             duration: 5000,
             gravity: "top",
             position: "right",
@@ -82,16 +82,18 @@ const getListProducts = async () => {
 
         // OBTENER CART ID
 
-        let user = await fetch("/profile",
+        let user = await fetch("/api/sessions/current",
             {
                 method: "GET",
                 headers: {
+                    "Content-Type": "application/json",
                     'accept': 'application/json'
                 }
             })
 
         let info = await user.json();
         let cartId = info.user.cart._id
+
         
         // AÑADIR PRODUCTOS
 
@@ -195,8 +197,8 @@ const getListProducts = async () => {
             lastPage.classList.remove("disabled")
         }
         pagination.append(lastPage)
-    } catch {
-        console.log("Error products: Unexpected server error. Try later.")
+    } catch (error) {
+        console.log(`Error products: Unexpected server error. Try later. ${error.message}`)
     }
 }
 

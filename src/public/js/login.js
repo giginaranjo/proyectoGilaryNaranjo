@@ -17,16 +17,25 @@ if (message) {
 }
 
 
+const validEmail = email => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email)
+}
+
 
 btnLogin.addEventListener("click", async (e) => {
     e.preventDefault()
-console.log("hola");
 
     let email = document.getElementById("email").value.toLowerCase()
     let password = document.getElementById("password").value
 
     if (!email.trim() || !password || password == " ") {
         alertValidation.textContent = 'Complete the required fields'
+        return
+    }
+
+    if (!validEmail(email)) {
+        alertValidation.textContent = 'Wrong email format'
         return
     }
 
@@ -37,7 +46,8 @@ console.log("hola");
             {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    'accept': 'application/json'
                 },
                 body: JSON.stringify(loginUser)
             })
@@ -52,10 +62,10 @@ console.log("hola");
             }, 5000);
 
         } else {
-            const name = encodeURIComponent(data.user.name)
+            const name = encodeURIComponent(data.user.first_name)
             const email = encodeURIComponent(data.user.email)
-            const rol = encodeURIComponent(data.user.rol)
-            window.location.href = `/products?name=${name}&email=${email}&rol=${rol}`
+            const role = encodeURIComponent(data.user.role)
+            window.location.href = `/products?name=${name}&email=${email}&role=${role}`
         }
 
     } catch (error) {
