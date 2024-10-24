@@ -25,7 +25,7 @@ export default class CartsManager {
         let carts = await this.getCarts()
         let id = (carts.length > 0) ? carts[carts.length - 1].id + 1 : 100;
 
-        let {products} = newCart
+        let { products } = newCart
 
         let cartCreated = {
             id,
@@ -43,7 +43,7 @@ export default class CartsManager {
         let carts = await this.getCarts()
         let cart = carts.find(c => c.id === idCard)
 
-        if(!cart){
+        if (!cart) {
             return { success: false, message: 'Cart not found' };
         }
 
@@ -57,12 +57,12 @@ export default class CartsManager {
 
 
         if (!addProduct) {
-            cart.products.push({id: idProduct, quantity: 1})
+            cart.products.push({ id: idProduct, quantity: 1 })
         } else {
             addProduct.quantity += 1
         }
 
         await fs.promises.writeFile(dbCarts, JSON.stringify(carts, null, 5))
         return cart
-    } 
+    }
 }

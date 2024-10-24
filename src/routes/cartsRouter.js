@@ -43,7 +43,7 @@ router.get("/:cid", async (req, res) => {
     try {
         let cart = await CartsManager.getBy(cid)
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({cart})
+        return res.status(200).json({ cart })
 
     } catch (error) {
         return catchError(res, error)
@@ -146,7 +146,7 @@ router.put("/:cid", async (req, res) => {
         delete modification._id
         let pid = modification.products[0].product
 
-        
+
         // Validación existencia de producto en coll. por id
         let product = await ProductsManager.getProductsBy({ _id: pid });
         if (!product) {
@@ -203,16 +203,16 @@ router.put("/:cid/products/:pid", async (req, res) => {
         }
 
         // Validación existencia de producto en carrito por id
-        let objId=new mongoose.Types.ObjectId(pid)
+        let objId = new mongoose.Types.ObjectId(pid)
         let productExist = cart.products.some(p => p.product._id.equals(objId))
         if (!productExist) {
             res.setHeader('Content-Type', 'application/json');
             return res.status(400).json({ error: `Product not found in cart` })
         }
-    
-        
-        let {quantity} = req.body
-        
+
+
+        let { quantity } = req.body
+
         // Validación formato
         if (quantity === null || quantity === "" || quantity < 0 || isNaN(Number(quantity))) {
             res.setHeader('Content-Type', 'application/json');
@@ -220,7 +220,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
         }
 
 
-        let modifiedProduct = await CartsManager.updateCart(cid,pid,Number(quantity))
+        let modifiedProduct = await CartsManager.updateCart(cid, pid, Number(quantity))
 
         res.setHeader('Content-Type', 'application/json');
         return res.status(200).json({ modifiedProduct })
@@ -261,7 +261,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
         }
 
         // Validación existencia de producto en carrito por id
-        let objId=new mongoose.Types.ObjectId(pid)
+        let objId = new mongoose.Types.ObjectId(pid)
         let productExist = cart.products.some(p => p.product._id.equals(objId))
         if (!productExist) {
             res.setHeader('Content-Type', 'application/json');
@@ -275,7 +275,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
         }
 
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({ payload: "The product has been removed", updateCart: {deletedProduct} })
+        return res.status(200).json({ payload: "The product has been removed", updateCart: { deletedProduct } })
 
     } catch (error) {
         return catchError(res, error)
@@ -309,7 +309,7 @@ router.delete("/:cid", async (req, res) => {
         }
 
         res.setHeader('Content-Type', 'application/json');
-        return res.status(200).json({payload: "The products has been removed", updateCart: {emptyCart} })
+        return res.status(200).json({ payload: "The products has been removed", updateCart: { emptyCart } })
 
     } catch (error) {
         return catchError(res, error)

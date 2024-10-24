@@ -8,13 +8,13 @@ export class ProductsManagerMongo {
         return await productsModel.find().lean()
     }
 
-    static async getProducts(filter= {}, page, limit, sort={}) {
-       return await productsModel.paginate(filter, {lean:true, page, limit, sort})
+    static async getProducts(filter = {}, page, limit, sort = {}) {
+        return await productsModel.paginate(filter, { lean: true, page, limit, sort })
     }
 
     // Obtener productos por id
 
-    static async getProductsBy(filter={}) {
+    static async getProductsBy(filter = {}) {
         return await productsModel.findOne(filter).lean()
     }
 
@@ -28,12 +28,12 @@ export class ProductsManagerMongo {
     // Modificar productos
 
     static async modifyProduct(id, modification = {}) {
-        return await productsModel.findByIdAndUpdate(id, modification, {new: true}).lean()
+        return await productsModel.findByIdAndUpdate(id, modification, { new: true }).lean()
     }
 
     // Eliminar productos
 
-    static async deleteProduct(id) {  
+    static async deleteProduct(id) {
         return await productsModel.findByIdAndDelete(id).lean()
     }
 }

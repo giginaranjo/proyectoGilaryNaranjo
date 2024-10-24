@@ -9,7 +9,7 @@ import { config } from "./config/config.js";
 import passport from "passport";
 import { initPassport } from "./config/config-passport.js";
 import cookieParser from "cookie-parser"
-import {infoUser} from "./utils.js"
+import { infoUser } from "./utils.js"
 
 import { router as cartsRouter } from "./routes/cartsRouter.js";
 import { router as productsRouter } from "./routes/productsRouter.js";

@@ -12,8 +12,6 @@ const getProductsCart = async () => {
 
         let info = await user.json();
         let cartId = info.user.cart._id
-console.log(cartId);
-
 
         let response = await fetch(`/api/carts/${cartId}`)
         let data = await response.json()

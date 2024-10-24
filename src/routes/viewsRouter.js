@@ -37,7 +37,7 @@ router.get("/products", async (req, res) => {
 
 router.get("/realTimeProducts", async (req, res) => {
     let products
-    
+
     try {
         products = await ProductsManager.get()
         res.setHeader('Content-Type', 'text/html');

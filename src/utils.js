@@ -38,7 +38,7 @@ export const authenticate = fn => function (req, res, next) {
                 return res.redirect(`/login?message=${info.message ? info.message : info.toString()}`);
             }
         }
-        
+
         req.user = user
         return next()
     })(req, res, next)

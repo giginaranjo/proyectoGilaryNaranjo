@@ -129,11 +129,12 @@ export const initPassport = () => {
                         return done(null, false, { message: `Your account does not have the required information. Update your GitHub account information and try again.` })
                     }
 
-                    let user = await UserManager.getBy({ email })
-                    if (!user) {
-                        user = await UserManager.createUser({ first_name: name, email, profileGithub: profile })
+                    let userDB = await UserManager.getBy({ email })
+                    if (!userDB) {
+                        let newCart = await CartsManager.createCart()
+                        userDB = await UserManager.createUser({ first_name: name, email, cart: newCart._id, role: "User", profileGitHub: profile })
                     }
-
+                    let { profileGitHub, ...user } = userDB
                     return done(null, user)
 
                 } catch (error) {

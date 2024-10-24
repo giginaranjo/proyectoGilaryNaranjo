@@ -26,30 +26,30 @@ export class CartsManagerMongo {
 
     // Modificar productos del carrito
     static async modifyCart(id, modification) {
-        return await cartsModel.findByIdAndUpdate(id, modification, {new: true}).lean()
+        return await cartsModel.findByIdAndUpdate(id, modification, { new: true }).lean()
     }
 
     // Modificar cantidad de productos del carrito
-    static async updateCart(cartId,productId, quantity) {
+    static async updateCart(cartId, productId, quantity) {
         return await cartsModel.findOneAndUpdate(
-                                {_id:cartId, "products.product": productId}, 
-                                {$set: {"products.$.quantity":quantity}} , 
-                                {new: true, upsert:true}).lean()
+            { _id: cartId, "products.product": productId },
+            { $set: { "products.$.quantity": quantity } },
+            { new: true, upsert: true }).lean()
     }
 
     //Eliminar producto de carrito (individual)
     static async deleteProductCart(cartId, productId) {
         return await cartsModel.findByIdAndUpdate(
-                                cartId, 
-                                {$pull: {products: {product: productId}}}, 
-                                {new: true}).lean()
+            cartId,
+            { $pull: { products: { product: productId } } },
+            { new: true }).lean()
     }
 
     // Vaciar carrito 
-    static async emptyCart(id) {  
+    static async emptyCart(id) {
         return await cartsModel.findByIdAndUpdate(
-                                id, 
-                                {$set: {products: []}}, 
-                                {new: true}).lean()
+            id,
+            { $set: { products: [] } },
+            { new: true }).lean()
     }
 }

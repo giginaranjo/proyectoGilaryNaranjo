@@ -94,7 +94,7 @@ const getListProducts = async () => {
         let info = await user.json();
         let cartId = info.user.cart._id
 
-        
+
         // AÑADIR PRODUCTOS
 
         Array.from(document.getElementsByClassName("btnAdd")).forEach(button => {

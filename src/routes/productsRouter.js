@@ -11,9 +11,9 @@ export const router = Router()
 router.get("/", async (req, res) => {
 
     let { page, limit, sort, ...filters } = req.query
-    
-     // Validaciones de existencia y formato
-     if (!limit || isNaN(Number(limit))) {
+
+    // Validaciones de existencia y formato
+    if (!limit || isNaN(Number(limit))) {
         limit = 10
     }
     if (!page || isNaN(Number(page))) {
