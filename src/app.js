@@ -37,11 +37,15 @@ initPassport()
 app.use(passport.initialize())
 app.use(infoUser)
 
-app.use("/api/carts", cartsRouter)
 app.use("/api/products", productsRouter)
 app.use("/api/sessions", sessionsRouter)
+app.use("/api/carts", cartsRouter)
 app.use("/", viewsRouter)
+app.use("*", (req, res) => {
 
+    return res.status(404).json({ message: 'Not found' })
+
+})
 
 const server = app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`);
