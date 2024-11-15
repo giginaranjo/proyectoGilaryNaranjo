@@ -3,7 +3,15 @@
 <a href="/realTimeProducts">Real time products</a>
 
 {{#if inLogged}}
+
+{{#if user.cart}}
+{{#if user.cart._id}}
 <a href="/carts/{{user.cart._id}}">Shopping cart</a>
+{{else}}
+<a href="/carts/{{user.cart}}">Shopping cart</a>
+{{/if}}
+{{/if}}
+
 <a href="/profile" id="linkProfile">Profile</a>
 <a href="/api/sessions/logout" id="linkLogout">Logout</a>
 

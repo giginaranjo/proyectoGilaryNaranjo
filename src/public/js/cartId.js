@@ -11,7 +11,19 @@ const getProductsCart = async () => {
             })
 
         let info = await user.json();
-        let cartId = info.user.cart._id
+        let cartId
+
+        if (info.error) {
+            window.location.href = `/login?message= Log in to add the products to the shopping cart`
+        } else{
+            cartId = info.user.cart
+        }
+
+        if (typeof cartId == "string" ) {
+            cartId
+        } else if (cartId._id) {
+            cartId = cartId._id
+        }
 
         let response = await fetch(`/api/carts/${cartId}`)
         let data = await response.json()
@@ -56,11 +68,11 @@ const getProductsCart = async () => {
 
                     let removeProduct = await response.json()
                     if (removeProduct) {
-                        console.log("product removed");
+                        console.log("removed product");
                         getProductsCart();
 
                         Toastify({
-                            text: `Producto eliminado`,
+                            text: `Removed product`,
                             duration: 3000,
                             gravity: "top",
                             position: "right",

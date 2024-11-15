@@ -80,30 +80,41 @@ const getListProducts = async () => {
             productList.appendChild(li)
         })
 
-        // OBTENER CART ID
 
-        let user = await fetch("/api/sessions/current",
-            {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                    'accept': 'application/json'
-                }
-            })
-
-        let info = await user.json();
-        let cartId = info.user.cart._id
-
-
-        // AÑADIR PRODUCTOS
+        // BOTON AÑADIR PRODUCTOS
 
         Array.from(document.getElementsByClassName("btnAdd")).forEach(button => {
             button.addEventListener("click", async (e) => {
 
+                // OBTENER CART ID
+
+                let user = await fetch("/api/sessions/current",
+                    {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            'accept': 'application/json'
+                        }
+                    })
+
+                let info = await user.json();      
+                let cid
+
+                if (info.error) {
+                    window.location.href = `/login?message= Log in to add the products to the shopping cart`
+                } else{
+                    cid = info.user.cart
+                }
+
+                if (typeof cid == "string" ) {
+                    cid
+                } else if (cid._id) {
+                    cid = cid._id
+                }
+
+                // AÑADIR PRODUCTO
                 let pid = e.target.id
-                let cid = cartId
                 pid = pid.toString()
-                cid = cid.toString()
 
                 try {
 
@@ -126,7 +137,7 @@ const getListProducts = async () => {
                             gravity: "top",
                             position: "right",
                             stopOnFocus: true,
-                            destination: `/carts/${cartId}`,
+                            destination: `/carts/${cid}`,
                             style: {
                                 background: "#99ff0047"
                             }
