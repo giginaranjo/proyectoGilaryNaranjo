@@ -32,13 +32,19 @@ export class ViewsController{
 
     static getRealTimeProducts = async (req, res) => {
         let products
+        let user = req.user
+
+        if (user.role.toUpperCase().includes("USER")) {
+            return res.redirect(`/products?message= Unauthorized`)
+        }
+
     
         try {
             products = await ProductsManager.get()
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('realTimeProducts', {
                 products,
-                user: req.user,
+                user,
                 inLogged: req.cookies.tokenCookie
             })
         } catch (error) {

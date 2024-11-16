@@ -18,7 +18,7 @@ export const userSchema = new mongoose.Schema(
             ref: "carts"
         },
         role: {
-            type: String, default: "User"
+            type: String, default: "USER"
         }
     },
     {

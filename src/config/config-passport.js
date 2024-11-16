@@ -87,9 +87,7 @@ export const initPassport = () => {
                     let user
 
                     if (username == config.USER_NAME_ADMIN && password == config.PASSWORD_ADMIN) {
-                        user = { first_name: "Admin", email: username, role: "Admin" }
-
-                        return done(null, user)
+                        user = { first_name: "Admin", email: username, role: "ADMIN" }
 
                     } else {
 
@@ -102,10 +100,10 @@ export const initPassport = () => {
                             return done(null, false, { message: `Invalid credentials. Please check the data and try again.` })
                         }
 
-
-                        delete user.password
-                        return done(null, user)
                     }
+                    
+                    delete user.password
+                    return done(null, user)
 
                 } catch (error) {
                     return done(error)
@@ -132,7 +130,7 @@ export const initPassport = () => {
                     let userDB = await UserManager.getBy({ email })
                     if (!userDB) {
                         let newCart = await CartsManager.createCart()
-                        userDB = await UserManager.createUser({ first_name: name, email, cart: newCart._id, role: "User", profileGitHub: profile })
+                        userDB = await UserManager.createUser({ first_name: name, email, cart: newCart._id, role: "USER", profileGitHub: profile })
                     }
                     let { profileGitHub, ...user } = userDB
                     return done(null, user)

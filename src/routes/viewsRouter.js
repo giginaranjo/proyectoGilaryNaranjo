@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "../utils.js";
 import { ViewsController } from "../controllers/ViewsController.js";
+import { auth } from "../middlewares/auth.js";
 
 export const router = Router()
 
@@ -13,7 +14,7 @@ router.get("/", ViewsController.Home)
 router.get("/products", ViewsController.getProducts)
 
 
-router.get("/realTimeProducts", ViewsController.getRealTimeProducts)
+router.get("/realTimeProducts", authenticate("current"), ViewsController.getRealTimeProducts)
 
 
 router.get("/carts/:cid", authenticate("current"), ViewsController.getCart)

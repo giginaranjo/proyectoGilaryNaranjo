@@ -222,33 +222,6 @@ btnDelete.addEventListener("click", async (e) => {
 })
 
 
-/* Actualización lista de productos */
-
-/* socket.on("addProduct", (data) => {
-    if (data.status === "success") {
-        console.log("The product has been added successfully");
-    } else {
-        console.log("An error occurred while trying to add the product");
-    }
-})
-
-socket.on("modifyProduct", (data) => {
-    if (data.status === "success") {
-        console.log("The product has been modified successfully");
-    } else {
-        console.log("An error occurred while trying to modify the product");
-    }
-})
-
-socket.on("deleteProduct", (data) => {
-    if (data.status === "success") {
-        console.log("The product has been successfully removed");
-    } else {
-        console.log("An error occurred while trying to remove the product");
-    }
-}) */
-
-
 // ACTUALIZAR LISTA DE PRODUCTOS
 socket.on("updateProducts", (products) => {
 

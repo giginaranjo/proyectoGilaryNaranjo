@@ -9,13 +9,11 @@ const getListProducts = async () => {
     let sort = params.get("sort")
     let filter = params.get("filter")
 
-    let name = params.get("name")
-    let email = params.get("email")
-    let role = params.get("role")
+    let message = params.get("message")
 
-    if (name && email && role) {
+    if (message) {
         Toastify({
-            text: `Welcome, ${name} \n Email: ${email} \n Role: ${role}`,
+            text: `${message}`,
             duration: 5000,
             gravity: "top",
             position: "right",
@@ -97,16 +95,30 @@ const getListProducts = async () => {
                         }
                     })
 
-                let info = await user.json();      
+                let info = await user.json();
                 let cid
 
                 if (info.error) {
                     window.location.href = `/login?message= Log in to add the products to the shopping cart`
-                } else{
+                } else {
                     cid = info.user.cart
                 }
 
-                if (typeof cid == "string" ) {
+                if (!cid) {
+                    return Toastify({
+                        text: `Unauhorized`,
+                        duration: 5000,
+                        gravity: "top",
+                        position: "right",
+                        stopOnFocus: true,
+                        close: true,
+                        style: {
+                            background: "#99ff0047"
+                        }
+                    }).showToast();
+                }
+
+                if (typeof cid == "string") {
                     cid
                 } else if (cid._id) {
                     cid = cid._id

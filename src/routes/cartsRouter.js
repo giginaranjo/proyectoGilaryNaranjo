@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { CartsController } from "../controllers/CartsController.js";
+import { authenticate } from "../utils.js";
+import { auth } from "../middlewares/auth.js";
 
 export const router = Router()
 
@@ -17,7 +19,7 @@ router.post("/", CartsController.createCart)
 
 
 //AÑADIR PRODUCTO AL CARRITO
-router.post("/:cid/products/:pid", CartsController.addProduct)
+router.post("/:cid/products/:pid", authenticate("current"), auth(["USER"]), CartsController.addProduct)
 
 
 // MODIFICAR CARRITO

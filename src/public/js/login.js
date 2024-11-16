@@ -65,7 +65,7 @@ btnLogin.addEventListener("click", async (e) => {
             const name = encodeURIComponent(data.user.first_name)
             const email = encodeURIComponent(data.user.email)
             const role = encodeURIComponent(data.user.role)
-            window.location.href = `/products?name=${name}&email=${email}&role=${role}`
+            window.location.href = `/products?message= Welcome, ${name} | Email: ${email} | Role: ${role}`
         }
 
     } catch (error) {
