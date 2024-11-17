@@ -1,5 +1,5 @@
 
-# Primera Pre-Entrega
+# Entrega Final
 
 ## Authors
 
@@ -7,7 +7,7 @@
 
 ## Description
 
-Consta de un servidor que contiene los endpoints y servicios necesarios para registrarse, iniciar sesión, gestionar productos y carritos de compra. Cuenta con MongoDB como sistema de persistencia principal.
+Consta de un servidor que contiene los endpoints y servicios necesarios para registrarse, iniciar sesión, gestionar productos y carritos de compra, y realizar la compra de los productos ( por el momento solo se genera la orden del pedido). Cuenta con MongoDB como sistema de persistencia principal.
 
 Para realizar el testeo puede utilizar las siguientes lineas de código correspondientes a los datos que se deben ingresar para crear usuarios, productos y carritos respectivamente, y así empezar a interactuar con los endpoints.
 
