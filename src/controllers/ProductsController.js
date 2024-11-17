@@ -1,5 +1,4 @@
-// import ProductsManager from "../dao/productManager.js"
-import { ProductsManagerMongo as ProductsManager } from "../dao/productManagerMongo.js";
+import { productsService } from "../repository/ProductsService.js";
 import { isValidObjectId } from "mongoose";
 import { catchError } from "../utils.js";
 
@@ -43,14 +42,14 @@ export class ProductsController{
     
         try {
     
-            let product = await ProductsManager.getProductsBy(filter);
+            let product = await productsService.getProductsBy(filter);
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Category not found` })
             }
     
     
-            let products = await ProductsManager.getProducts(filter, page, limit, sort)
+            let products = await productsService.getProductsPaginate(filter, page, limit, sort)
     
             products.products = products.docs
             delete products.docs
@@ -76,7 +75,7 @@ export class ProductsController{
     
         try {
             // Validación existencia de producto por id
-            let product = await ProductsManager.getProductsBy({ _id: pid });
+            let product = await productsService.getProductsById({ _id: pid });
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Product not found` })
@@ -106,7 +105,7 @@ export class ProductsController{
     
     
         try {
-            let addedProduct = await ProductsManager.addProduct(newProduct)
+            let addedProduct = await productsService.addProduct(newProduct)
     
             res.setHeader('Content-Type', 'application/json');
             return res.status(201).json({ addedProduct })
@@ -127,7 +126,7 @@ export class ProductsController{
     
         try {
             // Validación existencia de producto por id
-            let product = await ProductsManager.getProductsBy({ _id: pid });
+            let product = await productsService.getProductsById({ _id: pid });
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Product not found` })
@@ -154,7 +153,7 @@ export class ProductsController{
             }
     
     
-            let modifiedProduct = await ProductsManager.modifyProduct(pid, modification)
+            let modifiedProduct = await productsService.modifyProduct(pid, modification)
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json({ modifiedProduct })
     
@@ -175,7 +174,7 @@ export class ProductsController{
         try {
     
             // Validación existencia de producto por id
-            let product = await ProductsManager.getProductsBy({ _id: pid });
+            let product = await productsService.getProductsById({ _id: pid });
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Product not found` })
@@ -183,7 +182,7 @@ export class ProductsController{
     
     
     
-            let deletedProduct = await ProductsManager.deleteProduct(pid)
+            let deletedProduct = await productsService.deleteProduct(pid)
             if (deletedProduct === 0) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(500).json({ error: 'An error occurred while trying to delete the product' })

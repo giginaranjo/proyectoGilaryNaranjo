@@ -16,8 +16,7 @@ import { router as productsRouter } from "./routes/productsRouter.js";
 import { router as sessionsRouter } from "./routes/sessionsRouter.js";
 import { router as viewsRouter } from "./routes/viewsRouter.js";
 
-// import ProductsManager from "./dao/productManager.js";
-import { ProductsManagerMongo as ProductsManager } from "./dao/productManagerMongo.js";
+import { productsService } from "./repository/ProductsService.js";
 
 
 const PORT = config.PORT;
@@ -60,7 +59,7 @@ const io = new Server(server)
 
 const updateProducts = async () => {
     try {
-        let products = await ProductsManager.get()
+        let products = await productsService.getProducts()
         io.emit("updateProducts", products)
     } catch (error) {
         console.log(error.message);
@@ -73,7 +72,7 @@ io.on("connection", (socket) => {
 
     socket.on("addProduct", async (data) => {
         try {
-            const addedProduct = await ProductsManager.addProduct(data)
+            const addedProduct = await productsService.addProduct(data)
             socket.emit("addProduct", { status: "success", addedProduct })
             updateProducts()
         } catch (error) {
@@ -85,7 +84,7 @@ io.on("connection", (socket) => {
 
     socket.on("modifyProduct", async (data) => {
         try {
-            const modifiedProduct = await ProductsManager.modifyProduct(data.pid, { ...data })
+            const modifiedProduct = await productsService.modifyProduct(data.pid, { ...data })
             socket.emit("modifyProduct", { status: "success", modifiedProduct })
             updateProducts()
         } catch (error) {
@@ -95,7 +94,7 @@ io.on("connection", (socket) => {
 
     socket.on("deleteProduct", async (data) => {
         try {
-            const deletedProduct = await ProductsManager.deleteProduct(data.pid)
+            const deletedProduct = await productsService.deleteProduct(data.pid)
             socket.emit("deleteProduct", { status: "success", deletedProduct })
             updateProducts()
         } catch (error) {

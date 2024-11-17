@@ -1,6 +1,6 @@
 /* import CartsManager from "../dao/cartsManager.js"; */
 import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js";
-import { ProductsManagerMongo as ProductsManager } from "../dao/productManagerMongo.js";
+import { productsService } from "../repository/ProductsService.js";
 import mongoose, { isValidObjectId } from "mongoose";
 import { catchError } from "../utils.js";
 
@@ -78,7 +78,7 @@ export class CartsController {
             }
 
             // Validación existencia de producto en coll. por id
-            let product = await ProductsManager.getProductsBy({ _id: pid })
+            let product = await productsService.getProductsById({ _id: pid })
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Product not found` })
@@ -137,7 +137,7 @@ export class CartsController {
 
 
             // Validación existencia de producto en coll. por id
-            let product = await ProductsManager.getProductsBy({ _id: pid });
+            let product = await productsService.getProductsById({ _id: pid });
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Product not found` })
@@ -176,7 +176,7 @@ export class CartsController {
 
         try {
             // Validación existencia de producto en coll. por id
-            let product = await ProductsManager.getProductsBy({ _id: pid });
+            let product = await productsService.getProductsById({ _id: pid });
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Product not found` })
@@ -240,7 +240,7 @@ export class CartsController {
             }
 
             // Validación existencia de producto en coll. por id
-            let product = await ProductsManager.getProductsBy({ _id: pid });
+            let product = await productsService.getProductsById({ _id: pid });
             if (!product) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Product not found` })

@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
-import ProductsManager from "./productManager.js";
 import { config } from "../config/config.js";
+import { productsService } from "../repository/ProductsService.js";
 
 const dbCarts = path.resolve(config.CARTS_PATH);
 
@@ -47,7 +47,7 @@ export default class CartsManager {
             return { success: false, message: 'Cart not found' };
         }
 
-        let productsColl = await ProductsManager.getProducts()
+        let productsColl = await productsService.getProducts()
         let products = productsColl.find(p => p.id === parseInt(idProduct));
         if (!products) {
             return { success: false, message: 'Product not found' };

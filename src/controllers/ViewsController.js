@@ -1,5 +1,4 @@
-/* import ProductsManager from "../dao/productManager.js" */
-import { ProductsManagerMongo as ProductsManager } from "../dao/productManagerMongo.js";
+import { productsService } from "../repository/ProductsService.js";
 import { catchError } from "../utils.js";
 
 export class ViewsController{
@@ -38,7 +37,7 @@ export class ViewsController{
 
     
         try {
-            products = await ProductsManager.get()
+            products = await productsService.getProducts()
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('realTimeProducts', {
                 products,

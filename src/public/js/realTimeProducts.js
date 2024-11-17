@@ -94,22 +94,17 @@ btnModify.addEventListener("click", async (e) => {
         return
     }
 
-    if (price.trim() !== "") {
-        price = Number(parseFloat(price))
-        if (price < 0 || isNaN(price)) {
-            alertModify.textContent = 'Enter a valid value'
-        } else {
-            price = undefined
-        }
+
+     price = Number(parseFloat(price))
+    if (price === null || price === "" || price === " " || price < 0) {
+        return alertModify.textContent = 'Enter a valid value'
     }
 
-    if (stock.trim() !== "") {
-        stock = Number(parseInt(stock))
-    } if (stock < 0 || isNaN(stock)) {
-        alertModify.textContent = 'Enter a valid value'
-    } else {
-        stock = undefined
+    stock = Number(parseInt(stock))
+    if (stock === null || stock === "" || stock === " " || stock < 0) {
+        return alertModify.textContent = 'Enter a valid value'
     }
+    
 
 
     let thumbnail = []
@@ -141,7 +136,6 @@ btnModify.addEventListener("click", async (e) => {
 
     let product = { pid, title, description, code, price, stock, category, thumbnail }
     let filterProduct = Object.fromEntries(Object.entries(product).filter(([key, value]) => value !== "" && value !== undefined && value !== null && (!Array.isArray(value) || value.length > 0)))
-    console.log(filterProduct);
 
 
     let responseId = await existId(pid)
@@ -237,6 +231,7 @@ socket.on("updateProducts", (products) => {
 
         li.innerHTML = `
         
+        <span>ID:${p._id}</span>
         <p>${p.thumbnail}</p>
         <h3>${p.title}</h3>
         <strong>Product information:</strong>
