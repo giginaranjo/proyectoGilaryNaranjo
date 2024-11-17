@@ -31,12 +31,22 @@ class ProductsService{
     }
 
     async getProductsBy(filter){
-        let product = new ProductsDTO(await this.productsDAO.getProductsBy(filter))    
+        let product = await this.productsDAO.getProductsBy(filter)
+        
+        if (product) {
+            product = new ProductsDTO(product)  
+         }
+
         return product
     }
 
     async getProductsById(id){
-        let product = new ProductsDTO(await this.productsDAO.getProductsBy(id))  
+        let product = await this.productsDAO.getProductsBy(id)
+
+        if (product) {
+           product = new ProductsDTO(product)  
+        }
+         
         return product
     }
 

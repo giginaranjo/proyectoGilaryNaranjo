@@ -2,11 +2,12 @@ import passport from "passport"
 import local from "passport-local"
 import github from "passport-github2"
 import passportJwt from "passport-jwt"
-import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js"
+
 import { createHash, validateHash } from "../utils.js"
 import { config } from "./config.js"
 import { usersService } from "../repository/UsersService.js"
 import { UsersDTO } from "../dto/UsersDTO.js"
+import { cartsService } from "../repository/CartsService.js"
 
 const searchToken = req => {
 
@@ -55,7 +56,7 @@ export const initPassport = () => {
 
                     password = createHash(password)
 
-                    let newCart = await CartsManager.createCart()
+                    let newCart = await cartsService.createCart()
 
                     let newUserDTO = new UsersDTO({
                         first_name,
@@ -133,7 +134,7 @@ export const initPassport = () => {
 
                     let userDB = await usersService.getUserByEmail({ email })
                     if (!userDB) {
-                        let newCart = await CartsManager.createCart()
+                        let newCart = await cartsService.createCart()
                         let newUserDTO = new UsersDTO({
                             first_name: name,
                             email,

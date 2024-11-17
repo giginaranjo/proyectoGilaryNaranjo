@@ -4,7 +4,7 @@ import { cartsModel } from "./models/cartsModel.js";
 export class CartsManagerMongo {
 
     // Obtener carritos
-    static async getCarts() {
+    static async get() {
         return await cartsModel.find().lean()
     }
 

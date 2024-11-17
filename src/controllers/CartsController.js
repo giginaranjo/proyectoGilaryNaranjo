@@ -1,14 +1,13 @@
-/* import CartsManager from "../dao/cartsManager.js"; */
-import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js";
 import { productsService } from "../repository/ProductsService.js";
 import mongoose, { isValidObjectId } from "mongoose";
 import { catchError } from "../utils.js";
+import { cartsService } from "../repository/CartsService.js";
 
 export class CartsController {
 
     static getCarts = async (req, res) => {
         try {
-            let carts = await CartsManager.getCarts()
+            let carts = await cartsService.getCarts()
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json(carts)
 
@@ -28,7 +27,7 @@ export class CartsController {
         }
 
         // Validación existencia de carrito por id
-        let cartExist = await CartsManager.getBy(cid);
+        let cartExist = await cartsService.getCartById(cid);
         if (!cartExist) {
             res.setHeader('Content-Type', 'application/json');
             return res.status(400).json({ error: `Cart not found` })
@@ -36,7 +35,7 @@ export class CartsController {
 
 
         try {
-            let cart = await CartsManager.getBy(cid)
+            let cart = await cartsService.getCartById(cid);
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json({ cart })
 
@@ -47,7 +46,7 @@ export class CartsController {
 
     static createCart = async (req, res) => {
         try {
-            let addedCart = await CartsManager.createCart()
+            let addedCart = await cartsService.createCart()
 
             res.setHeader('Content-Type', 'application/json');
             return res.status(201).json({ addedCart })
@@ -71,7 +70,7 @@ export class CartsController {
 
         try {
             // Validación existencia de carrito en coll. por id
-            let cart = await CartsManager.getBy(cid);
+            let cart = await cartsService.getCartById(cid);
             if (!cart) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Cart not found` })
@@ -98,7 +97,7 @@ export class CartsController {
             }
 
 
-            let addedProduct = await CartsManager.addProduct(cid, cart)
+            let addedProduct = await cartsService.addProduct(cid, cart)
             if (addedProduct.modifiedCount > 0) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(200).json({ message: 'Product added successfully' })
@@ -124,7 +123,7 @@ export class CartsController {
 
         try {
             // Validación existencia de carrito en coll. por id
-            let cart = await CartsManager.getBy(cid);
+            let cart = await cartsService.getCartById(cid);
             if (!cart) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Cart not found` })
@@ -151,7 +150,7 @@ export class CartsController {
             }
 
 
-            let modifiedCart = await CartsManager.modifyCart(cid, modification)
+            let modifiedCart = await cartsService.modifyCart(cid, modification)
 
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json({ modifiedCart })
@@ -183,7 +182,7 @@ export class CartsController {
             }
 
             // Validación existencia de carrito en coll. por id
-            let cart = await CartsManager.getBy(cid);
+            let cart = await cartsService.getCartById(cid);
             if (!cart) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Cart not found` })
@@ -207,7 +206,7 @@ export class CartsController {
             }
 
 
-            let modifiedProduct = await CartsManager.updateCart(cid, pid, Number(quantity))
+            let modifiedProduct = await cartsService.updateCart(cid, pid, Number(quantity))
 
             res.setHeader('Content-Type', 'application/json');
             return res.status(200).json({ modifiedProduct })
@@ -233,7 +232,7 @@ export class CartsController {
         try {
 
             // Validación existencia de carrito en coll. por id
-            let cart = await CartsManager.getBy(cid);
+            let cart = await cartsService.getCartById(cid);
             if (!cart) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Cart not found` })
@@ -254,7 +253,7 @@ export class CartsController {
                 return res.status(400).json({ error: `Product not found in cart` })
             }
 
-            let deletedProduct = await CartsManager.deleteProductCart(cid, pid)
+            let deletedProduct = await cartsService.deleteProductCart(cid, pid)
             if (deletedProduct === 0) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(500).json({ error: 'An error occurred while trying to delete the product' })
@@ -280,14 +279,14 @@ export class CartsController {
 
         try {
             // Validación existencia de carrito en coll. por id
-            let cart = await CartsManager.getBy(cid);
+            let cart = await cartsService.getCartById(cid);
             if (!cart) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(400).json({ error: `Cart not found` })
             }
 
 
-            let emptyCart = await CartsManager.emptyCart(cid)
+            let emptyCart = await cartsService.emptyCart(cid)
             if (!emptyCart) {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(500).json({ error: 'An error occurred while trying to delete the products' })
