@@ -15,11 +15,11 @@ const getProductsCart = async () => {
 
         if (info.error) {
             window.location.href = `/login?message= Log in to add the products to the shopping cart`
-        } else{
+        } else {
             cartId = info.user.cart
         }
 
-        if (typeof cartId == "string" ) {
+        if (typeof cartId == "string") {
             cartId
         } else if (cartId._id) {
             cartId = cartId._id
@@ -50,6 +50,7 @@ const getProductsCart = async () => {
             cartList.appendChild(li)
         })
 
+        // BOTON REMOVE
         Array.from(document.getElementsByClassName("btnRemove")).forEach(button => {
             button.addEventListener("click", async (e) => {
                 let pid = e.target.id
@@ -90,6 +91,66 @@ const getProductsCart = async () => {
                 }
             })
         })
+
+
+        // BOTON COMPRAR
+        let cid = cartId
+        let btnBuy = document.getElementById("buy")
+        btnBuy.addEventListener("click", async (e) => {
+
+            try {
+                const response = await fetch(`/api/carts/${cid}/purchase`,
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        }
+                    })
+
+                let data = await response.json()
+
+                if (response.status >= 400) {
+                    Toastify({
+                        text: `${data.error}`,
+                        duration: 3000,
+                        gravity: "top",
+                        position: "right",
+                        close: true,
+                        style: {
+                            background: "#99ff0047"
+                        }
+                    }).showToast();
+
+                } else {
+
+
+                    let noteTicket
+                    let noteOrder = `Order Nro. =  ${data.code} \n Date = ${data.purchase_datetime} \n Amount = $ ${data.amount} \n Email purchaser = ${data.purchaser}`        
+
+                    data.hasOwnProperty('warning') ? noteTicket = `Order processed. \n\n Order Nro. =  ${data.ticket.code} \n Date = ${data.ticket.purchase_datetime} \n Amount = $ ${data.ticket.amount} \n Email purchaser = ${data.ticket.purchaser} \n\n ${data.warning} \n\n Press the button to close` : noteTicket = `Order processed. \n\n ${noteOrder} \n\n Press the button to close`
+
+
+                    Toastify({
+                        text: `${noteTicket}`,
+                        duration: -1,
+                        gravity: "top",
+                        position: "right",
+                        close: true,
+                        style: {
+                            background: "#99ff0047"
+                        }
+                    }).showToast();
+                }
+
+                getProductsCart();
+
+            } catch (error) {
+                console.log("Error in the order proccess", error)
+            }
+        })
+
+
+
 
     } catch (error) {
         console.log("Error cart: Unexpected server error. Try later.", error)

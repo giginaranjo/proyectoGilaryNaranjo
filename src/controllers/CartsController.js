@@ -194,7 +194,7 @@ export class CartsController {
             }
 
             let code = codePurchase()
-            let purchase_datetime = new Date().toISOString().slice(2, 19)
+            let purchase_datetime = new Date().toISOString().replace('T', ' ').substring(0, 19);
             let amount = withStock.reduce((acum, p) => acum += p.quantity * p.price, 0)
             let purchaser = req.user.email
 
@@ -214,7 +214,7 @@ export class CartsController {
 
             if (error) {
                 res.setHeader('Content-Type', 'application/json');
-                return res.status(200).json({ ticket, alerta: "Important: Some items could not be processed due to lack of stock." })
+                return res.status(200).json({ ticket, warning: "Important: Some items could not be processed due to lack of stock." })
             } else {
                 res.setHeader('Content-Type', 'application/json');
                 return res.status(200).json(ticket)
