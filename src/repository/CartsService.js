@@ -13,7 +13,7 @@ class CartsService{
 
         if (Array.isArray(carts)) {
             carts = carts.map(c => new CartsDTO(c))
-        } else { // or else if (carts)
+        } else { 
             carts = new CartsDTO(carts)
         }
 
@@ -25,7 +25,7 @@ class CartsService{
 
         if (Array.isArray(cart)) {
             cart = cart.map(c => new CartsDTO(c))
-        } else { // or else if (carts)
+        } else if (cart) { 
             cart = new CartsDTO(cart)
         }
 
@@ -40,12 +40,16 @@ class CartsService{
         return await this.cartsDAO.addProduct( id , cart)
     }
 
+    async updateCart(filter, cart){
+        return await this.cartsDAO.updateCart(filter, cart)
+    }
+
     async modifyCart(id, modification){
         return await this.cartsDAO.modifyCart(id, modification)
     }
 
-    async updateCart(cid, pid, quantity){
-        return await this.cartsDAO.updateCart(cid, pid, quantity)
+    async updateCartProduct(cid, pid, quantity){
+        return await this.cartsDAO.updateCartProduct(cid, pid, quantity)
     }
 
     async deleteProductCart(cid, pid){

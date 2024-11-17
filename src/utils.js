@@ -54,3 +54,12 @@ export const infoUser = (req, res, next) => {
         next()
     })(req, res, next)
 }
+
+
+// GENERAR CODE
+
+export const codePurchase = () => {
+    const date = new Date().toISOString().slice(2, 19).replace(/[-:T]/g, '')
+    const numRandom = Math.floor(Math.random() * 10000).toString().padStart(3, '0')
+    return `${date}-${numRandom}`
+}

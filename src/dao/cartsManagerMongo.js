@@ -5,12 +5,12 @@ export class CartsManagerMongo {
 
     // Obtener carritos
     static async get() {
-        return await cartsModel.find().lean()
+        return await cartsModel.find().populate("products.product").lean()
     }
 
     // Obtener carrito por id
     static async getBy(id) {
-        return await cartsModel.findOne({ _id: id }).lean()
+        return await cartsModel.findOne({ _id: id }).populate("products.product").lean()
     }
 
     // Crear carrito
@@ -24,13 +24,18 @@ export class CartsManagerMongo {
         return cartsModel.updateOne({ _id: id }, cart)
     }
 
+    // Actualizar carrito
+    static async updateCart(filter, cart) {
+        return await cartsModel.updateOne(filter, cart, { new: true }).lean()
+    }
+
     // Modificar productos del carrito
     static async modifyCart(id, modification) {
         return await cartsModel.findByIdAndUpdate(id, modification, { new: true }).lean()
     }
-
+    
     // Modificar cantidad de productos del carrito
-    static async updateCart(cartId, productId, quantity) {
+    static async updateCartProduct(cartId, productId, quantity) {
         return await cartsModel.findOneAndUpdate(
             { _id: cartId, "products.product": productId },
             { $set: { "products.$.quantity": quantity } },

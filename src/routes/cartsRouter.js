@@ -22,12 +22,16 @@ router.post("/", CartsController.createCart)
 router.post("/:cid/products/:pid", authenticate("current"), auth(["USER"]), CartsController.addProduct)
 
 
+// REALIZAR EL PEDIDO
+router.post("/:cid/purchase", authenticate("current"), auth(["USER"]), CartsController.purchaseCart)
+
+
 // MODIFICAR CARRITO
-router.put("/:cid", authenticate("current"), auth(["USER"]), CartsController.modifyCartById)
+router.put("/:cid", authenticate("current"), auth(["USER"]), CartsController.updateCart)
 
 
 // MODIFICAR CANTIDAD DEL PRODUCTO EN CARRITO
-router.put("/:cid/products/:pid", authenticate("current"), auth(["USER"]), CartsController.updateCart)
+router.put("/:cid/products/:pid", authenticate("current"), auth(["USER"]), CartsController.updateCartProduct)
 
 
 // ELIMINAR PRODUCTO 
