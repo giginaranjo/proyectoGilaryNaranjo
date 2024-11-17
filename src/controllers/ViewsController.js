@@ -8,8 +8,7 @@ export class ViewsController{
         try {
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('index', {
-                user: req.user,
-                inLogged: req.cookies.tokenCookie
+                user: req.user
             })
     
         } catch (error) {
@@ -21,8 +20,7 @@ export class ViewsController{
     try {
         res.setHeader('Content-Type', 'text/html');
         res.status(200).render('index', {
-            user: req.user,
-            inLogged: req.cookies.tokenCookie
+            user: req.user
         })
 
     } catch (error) {
@@ -44,8 +42,7 @@ export class ViewsController{
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('realTimeProducts', {
                 products,
-                user,
-                inLogged: req.cookies.tokenCookie
+                user
             })
         } catch (error) {
             catchError(res, error)
@@ -57,8 +54,7 @@ export class ViewsController{
         try {
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('cartId', {
-                user: req.user,
-                inLogged: req.cookies.tokenCookie
+                user: req.user
             })
     
         } catch (error) {
@@ -70,8 +66,7 @@ export class ViewsController{
         try {
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('register', {
-                user: req.user,
-                inLogged: req.cookies.tokenCookie
+                user: req.user
             })
     
         } catch (error) {
@@ -83,8 +78,7 @@ export class ViewsController{
         try {
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('login', {
-                user: req.user,
-                inLogged: req.cookies.tokenCookie
+                user: req.user
             })
     
         } catch (error) {
@@ -102,8 +96,7 @@ export class ViewsController{
     
             res.setHeader('Content-Type', 'text/html');
             res.status(200).render('profile', {
-                user: req.user,
-                inLogged: req.cookies.tokenCookie
+                user: req.user
             })
     
         } catch (error) {

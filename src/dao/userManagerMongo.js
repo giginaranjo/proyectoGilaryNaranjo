@@ -11,7 +11,7 @@ export class UserManagerMongo {
 
     // Crear usuario
 
-    static async createUser(user = {}) {
+    static async create(user = {}) {
         let newUser = await usersModel.create(user)
         return newUser.toJSON()
     }

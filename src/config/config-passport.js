@@ -2,10 +2,11 @@ import passport from "passport"
 import local from "passport-local"
 import github from "passport-github2"
 import passportJwt from "passport-jwt"
-import { UserManagerMongo as UserManager } from "../dao/userManagerMongo.js"
 import { CartsManagerMongo as CartsManager } from "../dao/cartsManagerMongo.js"
 import { createHash, validateHash } from "../utils.js"
 import { config } from "./config.js"
+import { usersService } from "../repository/UsersService.js"
+import { UsersDTO } from "../dto/UsersDTO.js"
 
 const searchToken = req => {
 
@@ -15,11 +16,6 @@ const searchToken = req => {
     }
 
     return token
-}
-
-const validEmail = email => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email)
 }
 
 
@@ -34,18 +30,25 @@ export const initPassport = () => {
             async (req, username, password, done) => {
                 try {
                     let { first_name, last_name, age } = req.body
-
                     age = Number(age)
 
-                    if (!first_name || !last_name || !age || age == " " || password == " ") {
+                    if (!first_name.trim() || !last_name.trim() || !age || !username || !password || password == " ") {
                         return done(null, false, { message: 'Complete the required fields' })
                     }
 
-                    if (!validEmail(username)) {
+                    if (!UsersDTO.validName(first_name) || !UsersDTO.validName(last_name)) {
+                        return done(null, false, { message: 'First name or last name contains invalid characters. Only letters are allowed.' });
+                    }
+
+                    if (isNaN(age) || age < 18) {
+                        return done(null, false, { message: 'You must be over 18 years old to make the purchase.' });
+                    }
+
+                    if (!UsersDTO.validEmail(username)) {
                         return done(null, false, { message: 'Wrong email format' })
                     }
 
-                    let exist = await UserManager.getBy({ email: username })
+                    let exist = await usersService.getUserByEmail({ email: username })
                     if (exist) {
                         return done(null, false, { message: `This email ${username} is already being used with another account. Please check your email and try again or log in.` })
                     }
@@ -54,7 +57,7 @@ export const initPassport = () => {
 
                     let newCart = await CartsManager.createCart()
 
-                    let newUser = await UserManager.createUser({
+                    let newUserDTO = new UsersDTO({
                         first_name,
                         last_name,
                         age,
@@ -63,6 +66,7 @@ export const initPassport = () => {
                         cart: newCart._id
                     })
 
+                    let newUser = await usersService.createUser(newUserDTO)
                     return done(null, newUser)
 
                 } catch (error) {
@@ -80,7 +84,7 @@ export const initPassport = () => {
             async (username, password, done) => {
                 try {
 
-                    if (!validEmail(username)) {
+                    if (!UsersDTO.validEmail(username)) {
                         return done(null, false, { message: 'Wrong email format' })
                     }
 
@@ -91,7 +95,7 @@ export const initPassport = () => {
 
                     } else {
 
-                        user = await UserManager.getBy({ email: username })
+                        user = await usersService.getUserByEmail({ email: username })
                         if (!user) {
                             return done(null, false, { message: `Invalid credentials. Please check the data and try again.` })
                         }
@@ -101,8 +105,8 @@ export const initPassport = () => {
                         }
 
                     }
-                    
-                    delete user.password
+
+                    user = UsersDTO.deletePassword(user)
                     return done(null, user)
 
                 } catch (error) {
@@ -127,11 +131,19 @@ export const initPassport = () => {
                         return done(null, false, { message: `Your account does not have the required information. Update your GitHub account information and try again.` })
                     }
 
-                    let userDB = await UserManager.getBy({ email })
+                    let userDB = await usersService.getUserByEmail({ email })
                     if (!userDB) {
                         let newCart = await CartsManager.createCart()
-                        userDB = await UserManager.createUser({ first_name: name, email, cart: newCart._id, role: "USER", profileGitHub: profile })
+                        let newUserDTO = new UsersDTO({
+                            first_name: name,
+                            email,
+                            cart: newCart._id,
+                            role: "USER"
+                        })
+
+                        userDB = await usersService.createUser({ ...newUserDTO , profileGitHub: profile })
                     }
+
                     let { profileGitHub, ...user } = userDB
                     return done(null, user)
 

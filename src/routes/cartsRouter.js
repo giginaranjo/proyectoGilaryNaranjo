@@ -23,16 +23,16 @@ router.post("/:cid/products/:pid", authenticate("current"), auth(["USER"]), Cart
 
 
 // MODIFICAR CARRITO
-router.put("/:cid", CartsController.modifyCartById)
+router.put("/:cid", authenticate("current"), auth(["USER"]), CartsController.modifyCartById)
 
 
 // MODIFICAR CANTIDAD DEL PRODUCTO EN CARRITO
-router.put("/:cid/products/:pid", CartsController.updateCart)
+router.put("/:cid/products/:pid", authenticate("current"), auth(["USER"]), CartsController.updateCart)
 
 
 // ELIMINAR PRODUCTO 
-router.delete("/:cid/products/:pid", CartsController.deleteProductCartById)
+router.delete("/:cid/products/:pid", authenticate("current"), auth(["USER"]), CartsController.deleteProductCartById)
 
 
 // VACIAR CARRITO (ELIMINAR TODOS LOS PRODUCTOS, CONSERVAR EL CARRITO)
-router.delete("/:cid", CartsController.emptyCart)
+router.delete("/:cid", authenticate("current"), auth(["USER"]), CartsController.emptyCart)
